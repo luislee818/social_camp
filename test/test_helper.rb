@@ -10,4 +10,13 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def sign_in(user)
+    cookies[:user_id] = user.id
+  end
+  
+  def sign_out
+    cookies[:user_id] = nil
+  end
+  
+  alias :make_sure_user_is_not_signed_in :sign_out
 end

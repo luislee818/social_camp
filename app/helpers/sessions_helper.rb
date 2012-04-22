@@ -23,9 +23,27 @@ module SessionsHelper
     true unless current_user.nil?
   end
   
+  def current_user?(user)
+    current_user == user
+  end
+  
+  def save_previously_requested_page
+    session[:requested_page] = request.fullpath
+  end
+  
+  def redirect_to_previously_requested_page_or(default)
+    page_to_redirect = session[:requested_page] || default
+    redirect_to page_to_redirect
+    clear_requested_page
+  end
+  
   private
   
     def user_from_recognized_cookie
       User.find(cookies[:user_id]) if cookies[:user_id]
+    end
+    
+    def clear_requested_page
+      session.delete :requested_page
     end
 end
