@@ -8,3 +8,6 @@ en:
     attributes:
       user:
         password_digest: "Password"
+
+      event:
+        start_at: "Event date"

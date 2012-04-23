@@ -49,21 +49,12 @@ class UsersController < ApplicationController
     
     redirect_to users_path
   end
-  
-  private 
-  
-    def require_login
-      save_previously_requested_page
-      redirect_to signin_path, notice: "Please sign in." unless signed_in?
-    end
-    
+
+  private
+
     def require_current_user
       user = User.find(params[:id])
       redirect_to root_path unless current_user?(user)
-    end
-    
-    def require_admin
-      redirect_to root_path unless current_user.admin?
     end
 
 end

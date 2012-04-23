@@ -1,0 +1,21 @@
+<%= form_for @event, :html => { :class => "well" } do |f| %>
+  <%= render 'shared/error_messages', object: @event %>
+
+
+    <%= f.label :name, class: 'required' %><br />
+    <%= f.text_field :name %>
+
+    <%= f.label :location %><br />
+    <%= f.text_field :location %>
+
+    <%= f.label :description %><br />
+    <%= f.text_area :description, rows: 6 %>
+
+
+    <%= f.label :start_at, 'Date & Time', class: 'required' %><br />
+    <%= f.datetime_select :start_at, { start_year: 2012, end_year: 2013, prompt: true, datetime_separator: '', time_separator: '' }, class: "date-time-field"  %>
+
+    <div>
+    <%= f.submit @event.new_record? ? "Create event" : "Update event", class: "btn btn-large btn-primary" %>
+    </div>
+<% end %>

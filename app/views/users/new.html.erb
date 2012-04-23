@@ -3,21 +3,22 @@
 <div class="row">
   <div class="span6 offset3">
     <%= form_for @user, :html => { :class => "well" } do |f| %>
-	  <%= render 'shared/error_messages' %>
+	  <%= render 'shared/error_messages', object: @user %>
 	
-      <%= f.label :name %>
+      <%= f.label :name, class: 'required' %>
       <%= f.text_field :name %>
 
-      <%= f.label :email, "Email (must end with @nltechdev.com)" %>
-	  <%= f.text_field :email %>
+      <%= f.label :email, "Email (must end with @nltechdev.com)", class: 'required' %>
+	    <%= f.text_field :email %>
 		
-      <%= f.label :password %>
+      <%= f.label :password, class: 'required' %>
       <%= f.password_field :password %>
 
-      <%= f.label :password_confirmation, "Confirmation" %>
+      <%= f.label :password_confirmation, "Confirmation", class: 'required' %>
       <%= f.password_field :password_confirmation %>
 
       <%= f.submit "Create my account", class: "btn btn-large btn-primary" %>
+      <%= link_to 'Already a member?', signin_path, class: 'signin_link_on_signup_page' %>
     <% end %>
   </div>
 </div>

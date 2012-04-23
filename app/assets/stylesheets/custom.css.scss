@@ -42,6 +42,10 @@ textarea {
 	}
 }
 
+.updated_time {
+	font-style: italic;
+}
+
 /* typography */
 
 /*h1, h2, h3, h4, h5, h6 {
@@ -121,6 +125,10 @@ footer {
 
 /* forms */
 
+form .required {
+	font-weight: bold;
+}
+
 input, textarea, select, .uneditable-input {
   border: 1px solid #bbb;
   width: 100%;
@@ -142,6 +150,11 @@ input, textarea, select, .uneditable-input {
   @extend .error;
  }
 
+/* sign up */
+.signin_link_on_signup_page {
+	display: block;
+}
+
 /* users index */
 
 .users {
@@ -155,4 +168,12 @@ input, textarea, select, .uneditable-input {
       border-bottom: 1px solid $grayLighter;
     }
   }
+}
+
+/* events */
+
+.date-time-field {
+	width: 31.7%;
+	margin-left: 0.5%;
+	margin-right: 0.5%;
 }

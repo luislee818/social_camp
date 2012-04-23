@@ -1,0 +1,290 @@
+require 'test_helper'
+
+class EventsControllerTest < ActionController::TestCase
+  setup do
+    @event = events(:one)
+  end
+
+  # test "should get index" do
+  #   get :index
+  #   assert_response :success
+  #   assert_not_nil assigns(:events)
+  # end
+
+  # Create event-------------------------------------------------
+
+  test "user should signin before visiting create event page" do
+    make_sure_user_is_not_signed_in
+    get :new
+    assert_redirected_to signin_path
+  end
+
+  test "new event page title should be 'SocialCamp | Create new event'" do
+    user = users(:john)
+    sign_in user
+    get :new
+    assert_select 'title', 'SocialCamp | Create new event'
+  end
+
+  test "event should not be created when name is not provided" do
+    user = users(:john)
+    sign_in user
+
+    post :create, start_at: Time.now
+    assert_template 'new'
+  end
+
+  test "event should not be created when start_at is not provided" do
+    user = users(:john)
+    sign_in user
+
+    post :create, name: "foo"
+    assert_template 'new'
+  end
+
+  test "event should be created when valid info (name and start_at) is provided" do
+    user = users(:john)
+    sign_in user
+
+    event_name = "foo"
+    event_datetime = Time.now
+    post :create, event: { name: event_name, start_at: event_datetime }
+
+    assert_redirected_to events_path
+
+    event_created = Event.find_by_name event_name
+
+    refute event_created.nil?
+    assert_equal event_datetime.to_i, event_created.start_at.to_i # better way to compare dates?
+    assert_equal user, event_created.user
+  end
+
+  # Show event-------------------------------------------------
+  test "user should login before viewing an event" do
+    make_sure_user_is_not_signed_in
+    event = events(:one)
+    get :show, id: event.id
+
+    assert_redirected_to signin_path
+  end
+
+  test "user can view an event after login" do
+    user = users(:john)
+    sign_in user
+
+    event = events(:one)
+    get :show, id: event.id
+
+    assert_select 'title', 'SocialCamp | View event'
+    assert_select 'h1', 'Event details'
+  end
+
+  # TODO: how to test a link with text exists?
+  # test "event creator should see edit link when viewing an event" do
+  #   user = users(:john)
+  #   sign_in user
+
+  #   event = events(:one) # created by john
+  #   get :show, id: event.id
+
+  # end
+
+  # Show events-------------------------------------------------
+  test "user should login before viewing events" do
+    make_sure_user_is_not_signed_in
+    
+    get :index
+
+    assert_redirected_to signin_path
+  end
+
+  test "user can view events after login" do
+    user = users(:john)
+    sign_in user
+
+    get :index
+
+    assert_select 'title', 'SocialCamp | Events'
+  end
+
+  # Edit event-------------------------------------------------
+  test "user should login before viewing edit event page" do
+    make_sure_user_is_not_signed_in
+    event = events(:one)
+    get :edit, id: event.id
+
+    assert_redirected_to signin_path
+  end
+
+  test "user cannot view edit page of an event created by others" do
+    user = users(:jane)
+    sign_in user
+
+    event = events(:one) # event created by john
+    get :edit, id: event.id
+
+    assert_redirected_to events_path
+  end
+
+  test "user can view edit page of an event created by herself" do
+    user = users(:john)
+    sign_in user
+
+    event = events(:one) # event created by john
+    get :edit, id: event.id
+
+    assert_select 'title', 'SocialCamp | Edit event'
+  end
+
+  test "admin can view edit page of an event created by others" do
+    admin = users(:admin)
+    sign_in admin
+
+    event = events(:one) # event created by john
+    get :edit, id: event.id
+
+    assert_select 'title', 'SocialCamp | Edit event'
+  end
+
+  # Update event-------------------------------------------------
+  test "user should login before update an event" do
+    make_sure_user_is_not_signed_in
+    event = events(:one)
+    put :update, id: event.id
+
+    assert_redirected_to signin_path
+  end
+
+  test "user cannot update an event created by others" do
+    user = users(:jane)
+    sign_in user
+
+    event = events(:one) # event created by john
+    put :update, id: event.id
+
+    assert_redirected_to events_path
+  end
+
+  test "user can update an event created by herself" do
+    user = users(:john)
+    sign_in user
+
+    event = events(:one) # event created by john
+    updated_name = "foobar"
+    updated_location = "Lorem Ipsum"
+    updated_description = "More Lorem Ipsum"
+    updated_time = Time.now
+    put :update, id: event.id, event: { name: updated_name, location: updated_location,
+                 description: updated_description, start_at: updated_time }
+
+    assert_redirected_to event
+
+    updated_event = Event.find event.id
+
+    assert_equal updated_name, updated_event.name
+    assert_equal updated_location, updated_event.location
+    assert_equal updated_description, updated_event.description
+    assert_equal updated_time.to_i, updated_event.start_at.to_i
+    assert_equal user.id, updated_event.user_id
+  end
+
+  test "admin can update an event created by another user" do
+    admin = users(:admin)
+    sign_in admin
+
+    event = events(:two) # event created by john
+    updated_name = "foobar"
+    updated_location = "Lorem Ipsum"  
+    updated_description = "More Lorem Ipsum"
+    updated_time = Time.now
+    put :update, id: event.id, event: { name: updated_name, location: updated_location,
+                 description: updated_description, start_at: updated_time }
+
+    assert_redirected_to event
+
+    updated_event = Event.find event.id
+
+    assert_equal updated_name, updated_event.name
+    assert_equal updated_location, updated_event.location
+    assert_equal updated_description, updated_event.description
+    assert_equal updated_time.to_i, updated_event.start_at.to_i
+    assert_equal admin.id, updated_event.user_id
+  end
+
+  # Destroy event-------------------------------------------------
+  test "user should login before destroy an event" do
+    make_sure_user_is_not_signed_in
+    event = events(:one)
+    delete :destroy, id: event.id
+
+    assert_redirected_to signin_path
+  end
+
+  test "user cannot destroy an event created by others" do
+    user = users(:jane)
+    sign_in user
+
+    event = events(:one) # event created by john
+    delete :destroy, id: event.id
+
+    assert_redirected_to events_path
+
+    event_attempted_to_destroy = Event.find_by_id event.id
+
+    refute event_attempted_to_destroy.nil?
+  end
+
+  test "user can destroy an event created by herself" do
+    user = users(:john)
+    sign_in user
+
+    event = events(:one) # event created by john
+    delete :destroy, id: event.id
+
+    assert_redirected_to events_path
+
+    event_attempted_to_destroy = Event.find_by_id event.id
+
+    assert event_attempted_to_destroy.nil?
+  end
+
+  test "admin can destroy an event created by another user" do
+    admin = users(:admin)
+    sign_in admin
+
+    event = events(:one) # event created by john
+    delete :destroy, id: event.id
+
+    assert_redirected_to events_path
+
+    event_attempted_to_destroy = Event.find_by_id event.id
+
+    assert event_attempted_to_destroy.nil?
+  end
+
+  # test "should update event" do
+  #   put :update, id: @event, event: { description: @event.description, location: @event.location, name: @event.name, start_at: @event.start_at }
+  #   assert_redirected_to event_path(assigns(:event))
+  # end
+
+  # test "should destroy event" do
+  #   assert_difference('Event.count', -1) do
+  #     delete :destroy, id: @event
+  #   end
+
+  #   assert_redirected_to events_path
+  # end
+
+  def post_attributes(name, datetime, location = "", description = "")
+    attributes_hash = { name: name,
+                        %s[start_at(1i)] => datetime.year,
+                        %s[start_at(2i)] => datetime.month,
+                        %s[start_at(3i)] => datetime.day,
+                        %s[start_at(4i)] => datetime.hour,
+                        %s[start_at(5i)] => datetime.min,
+                        location: location,
+                        description: description }
+
+    #ActiveSupport::HashWithIndifferentAccess.new attributes_hash
+  end
+end

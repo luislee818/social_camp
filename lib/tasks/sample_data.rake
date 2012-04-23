@@ -1,6 +1,7 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
+    # users
     admin = User.create!(name: "Dapeng",
                  email: "dpli@nltechdev.com",
                  password: "111111",
@@ -25,6 +26,37 @@ namespace :db do
                    email: email,
                    password: password,
                    password_confirmation: password)
+    end
+
+    # events
+    25.times do |n|
+      event_name = Faker::Lorem.words(rand(6))
+      event_location = Faker::Address.street_name
+      event_description = Faker::Lorem.paragraph(rand(4))
+      event_start_at = rand(10000).minutes.from_now
+      event_user_id = rand(100)
+
+      event = Event.new(name: event_name,
+                    location: event_location,
+                    description: event_description,
+                    start_at: event_start_at)
+      event.user_id = event_user_id
+      event.save
+    end
+
+    25.times do |n|
+      event_name = Faker::Lorem.words(rand(6))
+      event_location = Faker::Address.street_name
+      event_description = Faker::Lorem.paragraph(rand(4))
+      event_start_at = rand(10000).minutes.ago
+      event_user_id = rand(100)
+
+      event = Event.new(name: event_name,
+                    location: event_location,
+                    description: event_description,
+                    start_at: event_start_at)
+      event.user_id = event_user_id
+      event.save
     end
   end
 end

@@ -1,4 +1,6 @@
 SocialCamp::Application.routes.draw do
+  resources :events
+
   # root
   root :to => 'static_pages#home'
   

@@ -10,6 +10,8 @@
 #
 
 class User < ActiveRecord::Base
+  has_many :events
+  
   attr_accessible :email, :name, :password, :password_confirmation
 
   VALID_EMAIL_REGEX = /\A[\w-]+@nltechdev.com\z/i

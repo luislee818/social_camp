@@ -9,6 +9,11 @@ class UsersControllerTest < ActionController::TestCase
     get :new
     assert_response :success
   end
+
+  test "signup page title should be 'SocialCamp | Sign up'" do
+    get :new
+    assert_select 'title', 'SocialCamp | Sign up'
+  end
   
   test "show page should display user name in h1" do
     get :show, id: @user

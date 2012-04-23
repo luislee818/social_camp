@@ -1,0 +1,6 @@
+<p>
+	<%= format_datetime event.start_at %>&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to event.name, event %>
+	<% unless event.location.empty? %>
+		&nbsp;at&nbsp;<%= event.location %>
+	<% end %>
+</p>
