@@ -1,6 +1,7 @@
 <%= form_for @comment do |f| %>
+	<%= render 'shared/error_messages', object: @comment %>
 	<%= hidden_field_tag(:discussion_id, @comment.discussion.id) %>
     <%= f.text_area :content, rows: 4 %>
 
-    <%= f.submit "Comment", class: "btn btn-small btn-primary" %>
+    <%= f.submit @comment.new_record? ? "Comment" : "Update", class: "btn btn-small btn-primary" %>
 <% end %>

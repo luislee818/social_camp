@@ -2,10 +2,20 @@
 	<div class="comment-container">
 		<div class="small-avatar">
 			<%= gravatar_for comment.user, size: 24 %><br/>
-			<%= comment.user.name %>
+			<%= link_to comment.user.name, comment.user %>
 		</div>
-		<div class="comment">
-			<%= comment.content %>
+		<div class="comment-content-container">
+			<div class="comment"><%= sanitize_content comment.content %></div>
+			<% if current_user == comment.user || current_user.admin? %>
+				<div class="edit-delete">
+		       		<%= link_to 'Edit', edit_comment_path(comment) %>
+				       | <%= link_to 'Delete', comment, confirm: 'Are you sure?', method: :delete %>
+				</div>
+		    <% end %>
+			<div class="timestamp">
+				<%= time_ago_in_words(comment.updated_at) %> ago
+			</div>
 		</div>
+		
 	</div>
 <% end %>

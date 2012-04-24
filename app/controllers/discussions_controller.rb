@@ -52,7 +52,7 @@ class DiscussionsController < ApplicationController
 
     respond_to do |format|
       if @discussion.save
-        format.html { redirect_to discussions_path, flash: { success: 'Discussion was successfully created.' } }
+        format.html { redirect_to discussions_path, flash: { success: 'Discussion had been created.' } }
         format.json { render json: @discussion, status: :created, location: @discussion }
       else
         format.html { render action: "new" }
@@ -72,7 +72,7 @@ class DiscussionsController < ApplicationController
 
     respond_to do |format|
       if @discussion.update_attributes(params[:discussion])
-        format.html { redirect_to @discussion, flash: { success: 'Discussion was successfully created.' } }
+        format.html { redirect_to @discussion, flash: { success: 'Discussion had been updated.' } }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -93,7 +93,7 @@ class DiscussionsController < ApplicationController
     @discussion.destroy
 
     respond_to do |format|
-      format.html { redirect_to discussions_url, flash: { success: "Discussion was successfully deleted." } }
+      format.html { redirect_to discussions_url, flash: { success: "Discussion had been destroyed." } }
       format.json { head :no_content }
     end
   end

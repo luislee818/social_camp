@@ -2,19 +2,32 @@
 
 <div class="row">
 	<div class="span8 offset2">
+		<h2><%= @discussion.subject %></h2>
 		<div class="discussion-container">
 			<div class="avatar">
 				<%= gravatar_for @discussion.user %><br/>
-				<%= @discussion.user.name %>
+				<%= link_to @discussion.user.name, @discussion.user %>
 			</div>
-			<div class="discussion">
-				<%= @discussion.subject %><br/>
-				<%= @discussion.content %>
+			<div class="discussion-content-container">
+				<div class="discussion">
+					<%= @discussion.subject %><br/>
+					<%= sanitize_content @discussion.content %><br/>
+				</div>
+				<div class="timestamp">
+					<%= time_ago_in_words(@discussion.updated_at) %> ago
+				</div>
+				<% if current_user == @discussion.user || current_user.admin? %>
+					<div class="edit-delete">
+			       		<%= link_to 'Edit', edit_discussion_path(@discussion) %>
+					       | <%= link_to 'Delete', @discussion, confirm: 'Are you sure?', method: :delete %>
+					</div>
+			    <% end %>
 			</div>
 		</div>
+		<hr/>
 
 		<div class="comments">
-			<%= render partial: 'comments/comment', collection: @discussion.comments, as: "comment" %>
+			<%= render partial: @discussion.comments, spacer_template: "comments/comment_ruler" %>
 		</div>
 
 		<div class="new-comment">

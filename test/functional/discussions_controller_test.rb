@@ -140,7 +140,7 @@ class DiscussionsControllerTest < ActionController::TestCase
   end
 
   # Update discussion-------------------------------------------------
-  test "user should login before update an discussion" do
+  test "user should login before update a discussion" do
     make_sure_user_is_not_signed_in
     discussion = discussions(:one)
     put :update, id: discussion.id
@@ -148,7 +148,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert_redirected_to signin_path
   end
 
-  test "user cannot update an discussion created by others" do
+  test "user cannot update a discussion created by others" do
     user = users(:jane)
     sign_in user
 
@@ -158,7 +158,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert_redirected_to discussions_path
   end
 
-  test "user can update an discussion created by herself" do
+  test "user can update a discussion created by herself" do
     user = users(:john)
     sign_in user
 
@@ -177,7 +177,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert_equal user.id, updated_discussion.user_id
   end
 
-  test "admin can update an discussion created by another user" do
+  test "admin can update a discussion created by another user" do
     admin = users(:admin)
     sign_in admin
 
@@ -199,7 +199,7 @@ class DiscussionsControllerTest < ActionController::TestCase
 
 
   # Destroy discussion-------------------------------------------------
-  test "user should login before destroy an discussion" do
+  test "user should login before destroy a discussion" do
     make_sure_user_is_not_signed_in
     discussion = discussions(:one)
     delete :destroy, id: discussion.id
@@ -207,7 +207,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert_redirected_to signin_path
   end
 
-  test "user cannot destroy an discussion created by others" do
+  test "user cannot destroy a discussion created by others" do
     user = users(:jane)
     sign_in user
 
@@ -216,12 +216,12 @@ class DiscussionsControllerTest < ActionController::TestCase
 
     assert_redirected_to discussions_path
 
-    discussion_attempted_to_destroy = Discussion.find_by_id discussion.id
+    discussion_attempted_to_destroy = Discussion.find discussion.id
 
     refute discussion_attempted_to_destroy.nil?
   end
 
-  test "user can destroy an discussion created by herself" do
+  test "user can destroy a discussion created by herself" do
     user = users(:john)
     sign_in user
 
@@ -235,7 +235,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert discussion_attempted_to_destroy.nil?
   end
 
-  test "admin can destroy an discussion created by another user" do
+  test "admin can destroy a discussion created by another user" do
     admin = users(:admin)
     sign_in admin
 

@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      flash[:success] = "Welcome on board!"
+      flash[:success] = "Welcome on board, #{@user.name}."
       sign_in @user
       redirect_to @user
     else
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     user_to_delete = User.find(params[:id])
     unless current_user == user_to_delete
       user_to_delete.destroy
-      flash[:success] = "User #{user_to_delete.name} destroyed."
+      flash[:success] = "User #{user_to_delete.name} had been destroyed."
     end
     
     redirect_to users_path

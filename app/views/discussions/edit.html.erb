@@ -4,7 +4,7 @@
 <div class="row">
 	<div class="span6 offset3">
 		<%= render 'form' %>
-		<%= link_to 'All Discussions', discussions_path %>
+		<%= link_to 'Back to discussion', @discussion %>
 		| <%= link_to 'Delete', @discussion, confirm: 'Are you sure?', method: :delete %>
 	</div>
 </div>
