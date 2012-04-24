@@ -1,0 +1,11 @@
+<%= form_for @discussion, :html => { :class => "well" } do |f| %>
+  <%= render 'shared/error_messages', object: @discussion %>
+
+    <%= f.label :subject, class: 'required' %><br />
+    <%= f.text_field :subject %>
+
+    <%= f.label :content, class: 'required' %><br />
+    <%= f.text_area :content, rows: 8 %>
+
+    <%= f.submit @discussion.new_record? ? "Create discussion" : "Update discussion", class: "btn btn-large btn-primary" %>
+<% end %>

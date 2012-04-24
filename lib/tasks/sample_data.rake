@@ -2,11 +2,12 @@ namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
     # users
-    admin = User.create!(name: "Dapeng",
+    admin = User.new(name: "Dapeng",
                  email: "dpli@nltechdev.com",
                  password: "111111",
                  password_confirmation: "111111")
     admin.toggle!(:admin)
+    admin.save
                  
     User.create!(name: "John",
                  email: "john@nltechdev.com",
@@ -18,7 +19,7 @@ namespace :db do
                  password: "1234Abcd",
                  password_confirmation: "1234Abcd")
                  
-    99.times do |n|
+    (4..100).each do |n|
       name  = Faker::Name.name[0...20]
       email = "example-#{n+1}@nltechdev.com"
       password  = "password"
@@ -34,7 +35,7 @@ namespace :db do
       event_location = Faker::Address.street_name
       event_description = Faker::Lorem.paragraph(rand(4))
       event_start_at = rand(10000).minutes.from_now
-      event_user_id = rand(100)
+      event_user_id = rand(100) + 1 # random number from 1 to 100
 
       event = Event.new(name: event_name,
                     location: event_location,
@@ -49,7 +50,7 @@ namespace :db do
       event_location = Faker::Address.street_name
       event_description = Faker::Lorem.paragraph(rand(4))
       event_start_at = rand(10000).minutes.ago
-      event_user_id = rand(100)
+      event_user_id = rand(100) + 1 # random number from 1 to 100
 
       event = Event.new(name: event_name,
                     location: event_location,
@@ -57,6 +58,19 @@ namespace :db do
                     start_at: event_start_at)
       event.user_id = event_user_id
       event.save
+    end
+
+    # discussions
+    100.times do |n|
+      discussion_subject = Faker::Lorem.words(rand(6))[0...50]
+      discussion_content = Faker::Lorem.paragraph(rand(4))
+      discussion_user_id = rand(100) + 1 # random number from 1 to 100
+
+      discussion = Discussion.new(subject: discussion_subject, 
+                             content: discussion_content)
+      discussion.user_id = discussion_user_id
+
+      discussion.save
     end
   end
 end

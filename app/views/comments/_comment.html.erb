@@ -1,0 +1,11 @@
+<% unless comment.new_record? %>
+	<div class="comment-container">
+		<div class="small-avatar">
+			<%= gravatar_for comment.user, size: 24 %><br/>
+			<%= comment.user.name %>
+		</div>
+		<div class="comment">
+			<%= comment.content %>
+		</div>
+	</div>
+<% end %>

@@ -5,12 +5,6 @@ class EventsControllerTest < ActionController::TestCase
     @event = events(:one)
   end
 
-  # test "should get index" do
-  #   get :index
-  #   assert_response :success
-  #   assert_not_nil assigns(:events)
-  # end
-
   # Create event-------------------------------------------------
 
   test "user should signin before visiting create event page" do
@@ -26,11 +20,21 @@ class EventsControllerTest < ActionController::TestCase
     assert_select 'title', 'SocialCamp | Create new event'
   end
 
+  test "user should signin before creating event" do
+    make_sure_user_is_not_signed_in
+
+    event_name = "foo"
+    event_datetime = Time.now
+    post :create, event: { name: event_name, start_at: event_datetime }
+    
+    assert_redirected_to signin_path
+  end
+
   test "event should not be created when name is not provided" do
     user = users(:john)
     sign_in user
 
-    post :create, start_at: Time.now
+    post :create, event: { start_at: Time.now }
     assert_template 'new'
   end
 
@@ -38,7 +42,7 @@ class EventsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    post :create, name: "foo"
+    post :create, event: { name: "foo" }
     assert_template 'new'
   end
 
@@ -208,7 +212,7 @@ class EventsControllerTest < ActionController::TestCase
     assert_equal updated_location, updated_event.location
     assert_equal updated_description, updated_event.description
     assert_equal updated_time.to_i, updated_event.start_at.to_i
-    assert_equal admin.id, updated_event.user_id
+    assert_not_equal admin.id, updated_event.user_id
   end
 
   # Destroy event-------------------------------------------------

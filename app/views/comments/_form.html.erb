@@ -1,0 +1,6 @@
+<%= form_for @comment do |f| %>
+	<%= hidden_field_tag(:discussion_id, @comment.discussion.id) %>
+    <%= f.text_area :content, rows: 4 %>
+
+    <%= f.submit "Comment", class: "btn btn-small btn-primary" %>
+<% end %>

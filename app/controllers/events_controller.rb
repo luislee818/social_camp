@@ -4,9 +4,9 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @today_events = Event.today.order("start_at desc")
-    @upcoming_events = Event.upcoming.order("start_at desc")
-    @past_events = Event.past.order("start_at desc")
+    @today_events = Event.today
+    @upcoming_events = Event.upcoming
+    @past_events = Event.past
 
     respond_to do |format|
       format.html # index.html.erb
@@ -69,8 +69,6 @@ class EventsController < ApplicationController
     unless current_user == @event.user or current_user.admin?
       redirect_to events_path and return
     end
-
-    @event.user_id = current_user.id
 
     respond_to do |format|
       if @event.update_attributes(params[:event])

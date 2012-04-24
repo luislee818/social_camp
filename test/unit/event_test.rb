@@ -8,7 +8,8 @@ class EventTest < ActiveSupport::TestCase
   #   assert true
   # end
   test "event should have name" do
-  	event = Event.new(start_at: START_AT_VALID)
+    user = users(:john)
+  	event = user.events.build(start_at: START_AT_VALID)
 
   	assert event.invalid?
 
@@ -18,12 +19,19 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "event should have start_at date" do
-  	event = Event.new(name: NAME_VALID)
+  	user = users(:john)
+    event = user.events.build(name: NAME_VALID)
 
   	assert event.invalid?
 
   	event.start_at = START_AT_VALID
 
   	assert event.valid?
+  end
+
+  test "event should have user_id" do
+    event = Event.new(start_at: START_AT_VALID, name: NAME_VALID)
+
+    assert event.invalid?
   end
 end

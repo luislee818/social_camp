@@ -83,25 +83,70 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user name should be unique" do
+    user = User.new(name: NAME_VALID, 
+            email: EMAIL_VALID,
+            password: PASSWORD_VALID,
+            password_confirmation: PASSWORD_VALID)
+
+    user_with_same_name = user.dup
+    user_with_same_name.email = "foo#{user.email}"
+
+    user.save
+
+    assert user_with_same_name.invalid?
+  end
+
+  test "user name should be unique, name of same case should be invalid" do
+    user = User.new(name: NAME_VALID, 
+            email: EMAIL_VALID,
+            password: PASSWORD_VALID,
+            password_confirmation: PASSWORD_VALID)
+
+    user_with_same_name = user.dup
+    user_with_same_name.email = "foo#{user.email}"
+
+    user.save
+
+    assert user_with_same_name.invalid?
+  end
+
+  test "user name should be unique, name of different case should be valid" do
+    user = User.new(name: NAME_VALID, 
+            email: EMAIL_VALID,
+            password: PASSWORD_VALID,
+            password_confirmation: PASSWORD_VALID)
+
+    user_with_same_name = user.dup
+    user_with_same_name.email = "foo#{user.email}"
+    user_with_same_name.name = user.name.upcase
+
+    user.save
+
+    assert user_with_same_name.valid?
+  end
+
+  test "user email should be unique" do
   	user = User.new(name: NAME_VALID, 
   					email: EMAIL_VALID,
   					password: PASSWORD_VALID,
   					password_confirmation: PASSWORD_VALID)
 
   	user_with_same_email = user.dup
+    user_with_same_email.name = "foo #{user.name}"
 
   	user.save
 
   	assert user_with_same_email.invalid?
   end
 
-  test "user name should be unique, email should be case insensitive" do
+  test "user email should be unique, email should be case insensitive" do
   	user = User.new(name: NAME_VALID, 
   					email: EMAIL_VALID,
   					password: PASSWORD_VALID,
   					password_confirmation: PASSWORD_VALID)
 
   	user_with_same_email = user.dup
+    user_with_same_email.name = "foo #{user.name}"
   	user_with_same_email.email.upcase!
 
   	user.save

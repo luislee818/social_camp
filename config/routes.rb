@@ -1,5 +1,4 @@
 SocialCamp::Application.routes.draw do
-  resources :events
 
   # root
   root :to => 'static_pages#home'
@@ -7,6 +6,9 @@ SocialCamp::Application.routes.draw do
   # resources
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
+  resources :discussions
+  resources :events
+  resources :comments, only: [:create, :edit, :update, :destroy]
   
   # user profile
   match '/signup', to: 'users#new'

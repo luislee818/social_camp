@@ -1,0 +1,32 @@
+<%= provide(:title, 'View discussion') %>
+
+<div class="row">
+	<div class="span8 offset2">
+		<div class="discussion-container">
+			<div class="avatar">
+				<%= gravatar_for @discussion.user %><br/>
+				<%= @discussion.user.name %>
+			</div>
+			<div class="discussion">
+				<%= @discussion.subject %><br/>
+				<%= @discussion.content %>
+			</div>
+		</div>
+
+		<div class="comments">
+			<%= render partial: 'comments/comment', collection: @discussion.comments, as: "comment" %>
+		</div>
+
+		<div class="new-comment">
+			<%= render 'comments/form' %>
+		</div>
+
+		<div class="links">
+			<%= link_to 'All Discussions', discussions_path %>
+		    <% if current_user == @discussion.user || current_user.admin? %>
+		       | <%= link_to 'Edit', edit_discussion_path(@discussion) %>
+		       | <%= link_to 'Delete', @discussion, confirm: 'Are you sure?', method: :delete %>
+		    <% end %>
+		</div>
+	</div>
+</div>

@@ -155,25 +155,83 @@ input, textarea, select, .uneditable-input {
 	display: block;
 }
 
-/* users index */
+/* users */
 
 .users {
-  list-style: none;
-  margin: 0;
-  li {
-    overflow: auto;
-    padding: 10px 0;
-    border-top: 1px solid $grayLighter;
-    &:last-child {
-      border-bottom: 1px solid $grayLighter;
-    }
-  }
+	.user-list {
+	  list-style: none;
+	  margin: 0;
+	  li {
+	    overflow: auto;
+	    padding: 10px 0;
+	    border-top: 1px solid $grayLighter;
+	    &:last-child {
+	      border-bottom: 1px solid $grayLighter;
+	    }
+	  }
+	}
 }
+
 
 /* events */
 
-.date-time-field {
-	width: 31.7%;
-	margin-left: 0.5%;
-	margin-right: 0.5%;
+.events {
+	.date-time-field {
+		width: 31.7%;
+		margin-left: 0.5%;
+		margin-right: 0.5%;
+	}
+}
+
+/* discussions */
+
+.discussions {
+	.discussion-container {
+		border: solid 1px black;
+		padding: 2%;
+		margin-bottom: 4px;
+		overflow-y: auto;
+	}
+
+	.avatar {
+		width: 22%;
+		float: left;
+		padding: 1%;
+		/*margin-right: 2%;*/
+		border: solid 1px red;
+	}
+
+	.discussion {
+		float: right;
+		width: 70%;
+		padding: 2%;
+		border: solid 1px green;
+	}
+
+	.links {
+		border: solid 1px yellow;
+		clear: both;
+	}
+
+	.comment-container {
+		border: solid 1px black;
+		padding: 2%;
+		margin-bottom: 4px;
+		overflow-y: auto;
+	}
+
+	.small-avatar {
+		width: 22%;
+		float: left;
+		padding: 1%;
+		/*margin-right: 2%;*/
+		border: solid 1px red;
+	}
+
+	.comment {
+		float: right;
+		width: 60%;
+		padding: 2%;
+		border: solid 1px green;
+	}
 }

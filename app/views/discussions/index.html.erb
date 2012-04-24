@@ -1,0 +1,14 @@
+<%= provide(:title, 'Discussions') %>
+<%= link_to 'New Discussion', new_discussion_path %>
+
+<% unless @today_discussions.empty? %>
+	<hr/>
+	<h2>Updated today</h2>
+	<%= render partial: 'discussion_summary', collection: @today_discussions, as: "discussion" %>
+<% end %>
+
+<% unless @past_discussions.empty? %>
+	<hr/>
+	<h2>Updated earlier</h2>
+	<%= render partial: 'discussion_summary', collection: @past_discussions, as: "discussion" %>
+<% end %>
