@@ -43,6 +43,9 @@ namespace :db do
                     start_at: event_start_at)
       event.user_id = event_user_id
       event.save!
+
+      event.changelogs.create! user_id: event_user_id,
+                              action_type_id: ActionType::ADD
     end
 
     25.times do |n|
@@ -58,6 +61,9 @@ namespace :db do
                     start_at: event_start_at)
       event.user_id = event_user_id
       event.save
+
+      event.changelogs.create! user_id: event_user_id,
+                              action_type_id: ActionType::ADD
     end
 
     # discussions
@@ -71,6 +77,9 @@ namespace :db do
       discussion.user_id = discussion_user_id
 
       discussion.save!
+
+      discussion.changelogs.create! user_id: discussion_user_id,
+                              action_type_id: ActionType::ADD
     end
 
     # comments
@@ -83,6 +92,9 @@ namespace :db do
       comment.user_id = comment_user_id
 
       comment.save!
+
+      comment.changelogs.create! user_id: comment_user_id,
+                              action_type_id: ActionType::ADD
     end
   end
 end

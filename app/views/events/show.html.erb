@@ -23,15 +23,14 @@
     <% end %>
 
     <p>
-      <b>Start at:</b>
+      <b>Start:</b>
       <%= format_datetime @event.start_at %>
     </p>
+    <hr/>
+    <div class="history-container">
+        <%= render partial: 'shared/changelogs', object: @event.changelogs %>
+    </div>
 
-    <p>
-      <b>Updated by:</b>
-      <%= link_to @event.user.name, @event.user %>&nbsp;
-      <span class="updated_time"><%= time_ago_in_words(@event.updated_at) %>&nbsp;ago</span>
-    </p>
     <%= link_to 'All Events', events_path %>
     <% if current_user == @event.user || current_user.admin? %>
        | <%= link_to 'Edit', edit_event_path(@event) %>

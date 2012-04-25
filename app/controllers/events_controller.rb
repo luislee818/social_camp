@@ -16,7 +16,7 @@ class EventsController < ApplicationController
   # GET /events/1
   # GET /events/1.json
   def show
-    @event = Event.includes(:user).find(params[:id])
+    @event = Event.includes(:user, :changelogs).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -51,6 +51,8 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
+        log_change @event, ActionType::ADD
+
         format.html { redirect_to events_path, flash: { success: 'Event had been created.' } }
         format.json { render json: @event, status: :created, location: @event }
       else
@@ -71,6 +73,8 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.update_attributes(params[:event])
+        log_change @event, ActionType::UPDATE
+
         format.html { redirect_to @event, flash: { success: 'Event had been updated.' } }
         format.json { head :no_content }
       else
@@ -90,6 +94,8 @@ class EventsController < ApplicationController
     end
 
     @event.destroy
+
+    log_change @event, ActionType::DESTROY
 
     respond_to do |format|
       format.html { redirect_to events_url, flash: { success: "Event #{@event.name} had been destroyed." } }

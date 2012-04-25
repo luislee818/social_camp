@@ -56,11 +56,28 @@ class EventsControllerTest < ActionController::TestCase
 
     assert_redirected_to events_path
 
-    event_created = Event.find_by_name event_name
+    created_event = Event.find_by_name event_name
 
-    refute event_created.nil?
-    assert_equal event_datetime.to_i, event_created.start_at.to_i # better way to compare dates?
-    assert_equal user, event_created.user
+    refute created_event.nil?
+    assert_equal event_datetime.to_i, created_event.start_at.to_i # better way to compare dates?
+    assert_equal user, created_event.user
+  end
+
+  test "upon successful event creation there should be a changelog" do
+    user = users(:john)
+    sign_in user
+
+    event_name = "foo"
+    event_datetime = Time.now
+    post :create, event: { name: event_name, start_at: event_datetime }
+
+    created_event = Event.find_by_name event_name
+
+    changelog = Changelog.last
+
+    assert_equal created_event, changelog.trackable
+    assert_equal ActionType::ADD, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
   end
 
   # Show event-------------------------------------------------
@@ -215,6 +232,29 @@ class EventsControllerTest < ActionController::TestCase
     assert_not_equal admin.id, updated_event.user_id
   end
 
+  test "upon successful event update there should be a changelog" do
+    user = users(:john)
+    sign_in user
+
+    event = events(:one) # event created by john
+    updated_name = "foobar"
+    updated_location = "Lorem Ipsum"
+    updated_description = "More Lorem Ipsum"
+    updated_time = Time.now
+    put :update, id: event.id, event: { name: updated_name, location: updated_location,
+                 description: updated_description, start_at: updated_time }
+
+    assert_redirected_to event
+
+    updated_event = Event.find event.id
+
+    changelog = Changelog.last
+
+    assert_equal updated_event, changelog.trackable
+    assert_equal ActionType::UPDATE, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
+  end
+
   # Destroy event-------------------------------------------------
   test "user should login before destroy an event" do
     make_sure_user_is_not_signed_in
@@ -266,29 +306,19 @@ class EventsControllerTest < ActionController::TestCase
     assert event_attempted_to_destroy.nil?
   end
 
-  # test "should update event" do
-  #   put :update, id: @event, event: { description: @event.description, location: @event.location, name: @event.name, start_at: @event.start_at }
-  #   assert_redirected_to event_path(assigns(:event))
-  # end
+  test "upon successful event destroy there should be a changelog" do
+    user = users(:john)
+    sign_in user
 
-  # test "should destroy event" do
-  #   assert_difference('Event.count', -1) do
-  #     delete :destroy, id: @event
-  #   end
+    event = events(:one) # event created by john
+    delete :destroy, id: event.id
 
-  #   assert_redirected_to events_path
-  # end
+    event_attempted_to_destroy = Event.find_by_id event.id
 
-  def post_attributes(name, datetime, location = "", description = "")
-    attributes_hash = { name: name,
-                        %s[start_at(1i)] => datetime.year,
-                        %s[start_at(2i)] => datetime.month,
-                        %s[start_at(3i)] => datetime.day,
-                        %s[start_at(4i)] => datetime.hour,
-                        %s[start_at(5i)] => datetime.min,
-                        location: location,
-                        description: description }
+    changelog = Changelog.last
 
-    #ActiveSupport::HashWithIndifferentAccess.new attributes_hash
+    assert_equal event_attempted_to_destroy, changelog.trackable
+    assert_equal ActionType::DESTROY, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
   end
 end

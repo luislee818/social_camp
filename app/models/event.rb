@@ -1,5 +1,6 @@
 class Event < ActiveRecord::Base
   belongs_to :user
+  has_many :changelogs, as: :trackable, dependent: :destroy
 
   scope :upcoming, where("start_at > ?", Time.now).order('start_at asc')
   scope :past, where("start_at < ?", Time.now).order('start_at desc')

@@ -56,11 +56,27 @@ class DiscussionsControllerTest < ActionController::TestCase
 
     assert_redirected_to discussions_path
 
-    discussion_created = Discussion.find_by_subject discussion_subject
+    created_discussion = Discussion.find_by_subject discussion_subject
 
-    refute discussion_created.nil?
-    assert_equal discussion_content, discussion_created.content
-    assert_equal user, discussion_created.user
+    refute created_discussion.nil?
+    assert_equal discussion_content, created_discussion.content
+    assert_equal user, created_discussion.user
+  end
+
+  test "upon successful discussion creation there should be a changelog" do
+    user = users(:john)
+    sign_in user
+
+    discussion_subject = "Lorem Ipsum"
+    discussion_content = "More Lorem Ipsum"
+    post :create, discussion: { subject: discussion_subject, content: discussion_content }
+
+    created_discussion = Discussion.find_by_subject discussion_subject
+    changelog = Changelog.last
+
+    assert_equal created_discussion, changelog.trackable
+    assert_equal ActionType::ADD, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
   end
 
    # Show discussions-------------------------------------------------
@@ -196,6 +212,26 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert_not_equal admin.id, updated_discussion.user_id
   end
 
+  test "upon successful discussion update there should be a changelog" do
+    user = users(:john)
+    sign_in user
+
+    discussion = discussions(:one) # discussion created by john
+    updated_subject = "foobar"
+    updated_content = "Lorem Ipsum"
+    put :update, id: discussion.id, discussion: { subject: updated_subject,
+                                                  content: updated_content }
+
+    assert_redirected_to discussion
+
+    updated_discussion = Discussion.find discussion.id
+
+    changelog = Changelog.last
+
+    assert_equal updated_discussion, changelog.trackable
+    assert_equal ActionType::UPDATE, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
+  end
 
 
   # Destroy discussion-------------------------------------------------
@@ -247,6 +283,22 @@ class DiscussionsControllerTest < ActionController::TestCase
     discussion_attempted_to_destroy = Discussion.find_by_id discussion.id
 
     assert discussion_attempted_to_destroy.nil?
+  end
+
+  test "upon successful discussion destroy there should be a changelog" do
+    user = users(:john)
+    sign_in user
+
+    discussion = discussions(:one) # discussion created by john
+    delete :destroy, id: discussion.id
+
+    discussion_attempted_to_destroy = Discussion.find_by_id discussion.id
+
+    changelog = Changelog.last
+
+    assert_equal discussion_attempted_to_destroy, changelog.trackable
+    assert_equal ActionType::DESTROY, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
   end
 
 end

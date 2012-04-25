@@ -7,6 +7,8 @@ class CommentsController < ApplicationController
   	comment.user_id = current_user.id
 
   	if comment.save
+      log_change comment, ActionType::ADD
+
   		redirect_to discussion, flash: { success: "Comment had been created." }
   	else
   		redirect_to discussion, flash: { error: "Comment was not created, please try again."}
@@ -29,6 +31,8 @@ class CommentsController < ApplicationController
     end
     
     @comment.update_attributes(params[:comment])
+
+    log_change @comment, ActionType::UPDATE
     
     redirect_to @comment.discussion, flash: { success: "Comment had been updated." }
   end
@@ -41,6 +45,8 @@ class CommentsController < ApplicationController
     end
     
     @comment.destroy
+
+    log_change @comment, ActionType::DESTROY
     
     redirect_to @comment.discussion, flash: { success: "Comment had been destroyed." }
   end

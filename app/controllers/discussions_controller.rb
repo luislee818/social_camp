@@ -55,6 +55,8 @@ class DiscussionsController < ApplicationController
 
     respond_to do |format|
       if @discussion.save
+        log_change @discussion, ActionType::ADD
+
         format.html { redirect_to discussions_path, flash: { success: 'Discussion had been created.' } }
         format.json { render json: @discussion, status: :created, location: @discussion }
       else
@@ -75,6 +77,8 @@ class DiscussionsController < ApplicationController
 
     respond_to do |format|
       if @discussion.update_attributes(params[:discussion])
+        log_change @discussion, ActionType::UPDATE
+
         format.html { redirect_to @discussion, flash: { success: 'Discussion had been updated.' } }
         format.json { head :no_content }
       else
@@ -94,6 +98,8 @@ class DiscussionsController < ApplicationController
     end
 
     @discussion.destroy
+
+    log_change @discussion, ActionType::DESTROY
 
     respond_to do |format|
       format.html { redirect_to discussions_url, flash: { success: "Discussion had been destroyed." } }

@@ -63,6 +63,19 @@ textarea {
 	font-style: italic;
 }
 
+.history-container {
+	overflow-y: auto;
+}
+
+ul.changelogs-mini {
+	list-style: none;
+	li {
+		color: $grayLight;
+		margin-left: -25px;
+		font-style: italic;
+	}
+}
+
 /* typography */
 
 /*h1, h2, h3, h4, h5, h6 {

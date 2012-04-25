@@ -37,11 +37,28 @@ class CommentsControllerTest < ActionController::TestCase
     assert_redirected_to discussion
 
     # TODO: how to reload child assoications? discussion.comments.reload doesn't work
-    comment_created = Comment.last
+    created_comment = Comment.last
 
-    refute comment_created.nil?
-    assert_equal comment_content, comment_created.content
-    assert_equal user, comment_created.user
+    refute created_comment.nil?
+    assert_equal comment_content, created_comment.content
+    assert_equal user, created_comment.user
+  end
+
+  test "upon successful comment creation there should be a changelog" do
+    user = users(:john)
+    sign_in user
+
+    discussion = discussions(:one)
+
+    comment_content = "Lorem Ipsum"
+    post :create, discussion_id: discussion.id, comment: { content: comment_content }
+
+    created_comment = Comment.last
+    changelog = Changelog.last
+
+    assert_equal created_comment, changelog.trackable
+    assert_equal ActionType::ADD, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
   end
   
   # Edit comment-------------------------------------------------
@@ -133,6 +150,25 @@ class CommentsControllerTest < ActionController::TestCase
     assert_equal updated_content, updated_comment.content
     assert_not_equal admin.id, updated_comment.user_id
   end
+
+  test "upon successful comment update there should be a changelog" do
+    user = users(:john)
+    sign_in user
+
+    comment = comments(:one) # comment created by John
+    updated_content = "Lorem Ipsum"
+    put :update, id: comment.id, comment: { content: updated_content }
+
+    assert_redirected_to comment.discussion
+
+    updated_comment = Comment.find comment.id
+
+    changelog = Changelog.last
+
+    assert_equal updated_comment, changelog.trackable
+    assert_equal ActionType::UPDATE, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
+  end
   
   # Destroy comment-------------------------------------------------
   test "user should login before destroy a comment" do
@@ -183,6 +219,22 @@ class CommentsControllerTest < ActionController::TestCase
     comment_attempted_to_destroy = Comment.find_by_id comment.id
 
     assert comment_attempted_to_destroy.nil?
+  end
+
+  test "upon successful comment destroy there should be a changelog" do
+    user = users(:john)
+    sign_in user
+
+    comment = comments(:one) # comment created by john
+    delete :destroy, id: comment.id
+
+    comment_attempted_to_destroy = Comment.find_by_id comment.id
+
+    changelog = Changelog.last
+
+    assert_equal comment_attempted_to_destroy, changelog.trackable
+    assert_equal ActionType::DESTROY, changelog.action_type_id
+    assert_equal user.id, changelog.user_id
   end
 
 end

@@ -13,9 +13,10 @@
 					<%= @discussion.subject %><br/>
 					<%= sanitize_content @discussion.content %><br/>
 				</div>
-				<div class="timestamp">
-					<%= time_ago_in_words(@discussion.updated_at) %> ago
-				</div>
+				<hr/>
+			    <div class="history-container">
+			        <%= render partial: 'shared/changelogs', object: @discussion.changelogs %>
+			    </div>
 				<% if current_user == @discussion.user || current_user.admin? %>
 					<div class="edit-delete">
 			       		<%= link_to 'Edit', edit_discussion_path(@discussion) %>
