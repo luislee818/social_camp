@@ -1,3 +1,26 @@
-<p>
-	<%= link_to discussion.subject, discussion %> by <%= link_to discussion.user.name, discussion.user %> <%= time_ago_in_words discussion.updated_at %> ago
-</p>
+<!-- <p>
+	<%= link_to discussion.subject, discussion %> 
+	<% if discussion.comments.count > 0 %>
+		<span class="badge"><%= discussion.comments.count %></span>
+	<% end %> last update by <%= link_to discussion.user.name, discussion.user %> <%= time_ago_in_words discussion.updated_at %> ago
+</p> -->
+
+<tr>
+	<td class="avatar-column">
+		<%= gravatar_for discussion.user, size: 24 %>
+	</td>
+	<td class="username-column">
+		<%= link_to discussion.user.name, discussion.user %>
+	</td>
+	<td class="discussion-column">
+		<%= link_to (raw "<strong>#{discussion.subject}</strong>"), discussion %> 
+	</td>
+	<td class="timestamp-column">
+		<%=  time_ago_in_words discussion.updated_at %> ago
+	</td>
+	<td class="badge-column">
+		<% if discussion.comments.count > 0 %>
+			<span class="badge"><%= discussion.comments.count %></span>
+		<% end %>
+	</td>
+</tr>

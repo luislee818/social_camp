@@ -1,20 +1,25 @@
 <%= provide(:title, 'Events') %>
-<%= link_to 'New Event', new_event_path %>
 
-<% unless @today_events.empty? %>
-	<hr/>
-	<h2>Today's Events</h2>
-	<%= render partial: 'event_summary', collection: @today_events, as: "event" %>
-<% end %>
 
-<% unless @upcoming_events.empty? %>
-	<hr/>
-	<h2>Upcoming Events</h2>
-	<%= render partial: 'event_summary', collection: @upcoming_events, as: "event" %>
-<% end %>
+<div class="row">
+	<div class="span8 offset2">
+		<%= link_to 'New Event', new_event_path %>
+		<% unless @today_events.empty? %>
+			<hr/>
+			<h2>Today's Events</h2>
+			<%= render partial: 'event_summary', collection: @today_events, as: "event" %>
+		<% end %>
 
-<% unless @past_events.empty? %>
-	<hr/>
-	<h2>Past Events</h2>
-	<%= render partial: 'event_summary', collection: @past_events, as: "event" %>
-<% end %>
+		<% unless @upcoming_events.empty? %>
+			<hr/>
+			<h2>Upcoming Events</h2>
+			<%= render partial: 'event_summary', collection: @upcoming_events, as: "event" %>
+		<% end %>
+
+		<% unless @past_events.empty? %>
+			<hr/>
+			<h2>Past Events</h2>
+			<%= render partial: 'event_summary', collection: @past_events, as: "event" %>
+		<% end %>
+	</div>
+</div>

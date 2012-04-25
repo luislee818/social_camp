@@ -1,14 +1,17 @@
 <%= provide(:title, 'Discussions') %>
-<%= link_to 'New Discussion', new_discussion_path %>
 
-<% unless @today_discussions.empty? %>
-	<hr/>
-	<h2>Updated today</h2>
-	<%= render partial: 'discussion_summary', collection: @today_discussions, as: "discussion" %>
-<% end %>
 
-<% unless @past_discussions.empty? %>
-	<hr/>
-	<h2>Updated earlier</h2>
-	<%= render partial: 'discussion_summary', collection: @past_discussions, as: "discussion" %>
-<% end %>
+
+<div class="row">
+	<div class="span10 offset1">
+		<%= link_to 'New Discussion', new_discussion_path %><br/><br/>
+		<table class="table">
+			<tbody>
+				
+					<%= render partial: 'discussion_summary', collection: @past_discussions, as: "discussion" %>
+
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
