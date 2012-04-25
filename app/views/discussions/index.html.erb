@@ -1,17 +1,13 @@
 <%= provide(:title, 'Discussions') %>
 
-
-
 <div class="row">
 	<div class="span10 offset1">
 		<%= link_to 'New Discussion', new_discussion_path %><br/><br/>
 		<table class="table">
 			<tbody>
-				
-					<%= render partial: 'discussion_summary', collection: @past_discussions, as: "discussion" %>
-
-				</tr>
+				<%= render partial: 'discussion_summary', collection: @discussions, as: "discussion" %>
 			</tbody>
 		</table>
+		<%= will_paginate %>
 	</div>
 </div>

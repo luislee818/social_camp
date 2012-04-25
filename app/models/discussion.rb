@@ -14,4 +14,34 @@ class Discussion < ActiveRecord::Base
   validates :subject, presence: true, length: { maximum: 50 }
   validates :content, presence: true
   validates :user_id, presence: true
+
+  def last_update_content
+    if comments.count == 0
+      content
+    else
+      last_comment.content
+    end
+  end
+
+  def last_update_user
+    if comments.count == 0
+      user
+    else
+      last_comment.user
+    end
+  end
+
+  def last_update_time
+    if comments.count == 0
+      updated_at
+    else
+      last_comment.updated_at
+    end
+  end
+
+  private
+
+    def last_comment
+      comments.latest_update_first.first
+    end
 end

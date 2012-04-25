@@ -31,9 +31,9 @@ namespace :db do
 
     # events
     25.times do |n|
-      event_name = Faker::Lorem.words(rand(6))
+      event_name = Faker::Lorem.words(rand(6) + 1)
       event_location = Faker::Address.street_name
-      event_description = Faker::Lorem.paragraph(rand(4))
+      event_description = Faker::Lorem.paragraph(rand(4) + 1)
       event_start_at = rand(10000).minutes.from_now
       event_user_id = rand(100) + 1 # random number from 1 to 100
 
@@ -42,13 +42,13 @@ namespace :db do
                     description: event_description,
                     start_at: event_start_at)
       event.user_id = event_user_id
-      event.save
+      event.save!
     end
 
     25.times do |n|
-      event_name = Faker::Lorem.words(rand(6))
+      event_name = Faker::Lorem.words(rand(6) + 1)
       event_location = Faker::Address.street_name
-      event_description = Faker::Lorem.paragraph(rand(4))
+      event_description = Faker::Lorem.paragraph(rand(4) + 1)
       event_start_at = rand(10000).minutes.ago
       event_user_id = rand(100) + 1 # random number from 1 to 100
 
@@ -62,15 +62,27 @@ namespace :db do
 
     # discussions
     100.times do |n|
-      discussion_subject = Faker::Lorem.words(rand(6))[0...50]
-      discussion_content = Faker::Lorem.paragraph(rand(4))
+      discussion_subject = Faker::Lorem.words(rand(6) + 1)[0...50]
+      discussion_content = Faker::Lorem.paragraph(rand(4) + 1)
       discussion_user_id = rand(100) + 1 # random number from 1 to 100
 
       discussion = Discussion.new(subject: discussion_subject, 
                              content: discussion_content)
       discussion.user_id = discussion_user_id
 
-      discussion.save
+      discussion.save!
+    end
+
+    # comments
+    200.times do |n|
+      comment_content = Faker::Lorem.paragraph(rand(4) + 1)
+      comment_user_id = rand(100) + 1 # random number from 1 to 100
+
+      discussion = Discussion.find (rand(10) + 1)
+      comment = discussion.comments.new content: comment_content
+      comment.user_id = comment_user_id
+
+      comment.save!
     end
   end
 end

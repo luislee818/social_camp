@@ -9,11 +9,15 @@
 			<%= link_to "SocialCamp", root_path, class: "brand" %>
 			<div class="nav-collapse">
 			<nav>
+				<% if signed_in? %>
 				<ul class="nav">
 					<li><%= link_to "Discussions", discussions_path %></li>
 					<li><%= link_to "Events", events_path %></li>
 					<li><%= link_to "People", users_path %></li>
+					<li><%= link_to "Foo", users_path %></li>
+					<li><%= link_to "Bar", users_path %></li>
 				</ul>
+				<% end %>
 				<ul class="nav pull-right">
 					<li><%= link_to "Help", help_path %></li>
 					<%= render 'layouts/sign_in_sign_out' %>

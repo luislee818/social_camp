@@ -1,22 +1,23 @@
-<!-- <p>
-	<%= link_to discussion.subject, discussion %> 
-	<% if discussion.comments.count > 0 %>
-		<span class="badge"><%= discussion.comments.count %></span>
-	<% end %> last update by <%= link_to discussion.user.name, discussion.user %> <%= time_ago_in_words discussion.updated_at %> ago
-</p> -->
-
 <tr>
 	<td class="avatar-column">
 		<%= gravatar_for discussion.user, size: 24 %>
 	</td>
 	<td class="username-column">
-		<%= link_to discussion.user.name, discussion.user %>
+		<%= link_to discussion.last_update_user.name, discussion.last_update_user %>
 	</td>
 	<td class="discussion-column">
-		<%= link_to (raw "<strong>#{discussion.subject}</strong>"), discussion %> 
+		<%= link_to (raw "<strong>#{discussion.subject}</strong>"), discussion %> - 
+		<%= truncate discussion.last_update_content, length: 60 %>
+		&nbsp;
+		<% if date_is_today discussion.last_update_time  %>
+			<span class="label label-success" title="Updated Today">Today</span>
+		<% end %>
+		<% if date_is_yesterday discussion.last_update_time  %>
+			<span class="label label-warning"  title="Updated Yesterday">Yesterday</span>
+		<% end %>
 	</td>
 	<td class="timestamp-column">
-		<%=  time_ago_in_words discussion.updated_at %> ago
+		<%=  time_ago_in_words discussion.last_update_time %> ago
 	</td>
 	<td class="badge-column">
 		<% if discussion.comments.count > 0 %>

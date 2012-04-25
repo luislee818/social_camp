@@ -1,6 +1,14 @@
 <p>
 	<%= format_datetime event.start_at %>&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to event.name, event %>
+
 	<% unless event.location.empty? %>
 		&nbsp;at&nbsp;<%= event.location %>
+	<% end %>
+
+	<% if date_is_today event.start_at  %>
+		<span class="label label-success">Today</span>
+	<% end %>
+	<% if date_is_tomorrow event.start_at  %>
+		<span class="label label-info">Tomorrow</span>
 	<% end %>
 </p>

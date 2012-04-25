@@ -4,8 +4,10 @@ class DiscussionsController < ApplicationController
   # GET /discussions
   # GET /discussions.json
   def index
-    @today_discussions = Discussion.includes(:user).today
-    @past_discussions = Discussion.includes(:user).past
+    @discussions = Discussion.includes(:user)
+                  .sort_by { |d| d.last_update_time }
+                  .reverse
+                  .paginate(page: params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,6 +19,7 @@ class DiscussionsController < ApplicationController
   # GET /discussions/1.json
   def show
     @discussion = Discussion.includes(:user, { :comments => :user }).find(params[:id])
+    @comments = @discussion.comments.paginate page: params[:page]
     @comment = @discussion.comments.build
 
     respond_to do |format|

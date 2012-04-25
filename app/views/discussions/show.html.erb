@@ -27,12 +27,14 @@
 		<hr/>
 
 		<div class="comments">
-			<%= render partial: @discussion.comments, spacer_template: "comments/comment_ruler" %>
+			<%= render partial: @comments, spacer_template: "comments/comment_ruler" %>
 		</div>
 
 		<div class="new-comment">
 			<%= render 'comments/form' %>
 		</div>
+
+		<%= will_paginate @comments %>
 
 		<div class="links">
 			<%= link_to 'All Discussions', discussions_path %>
