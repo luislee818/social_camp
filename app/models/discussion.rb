@@ -1,7 +1,7 @@
 class Discussion < ActiveRecord::Base
   belongs_to :user
   has_many :comments, dependent: :destroy
-  has_many :changelogs, as: :trackable, dependent: :destroy
+  has_many :changelogs, as: :trackable
 
   scope :past, where("updated_at < ?", Date.today.beginning_of_day.utc).order('updated_at desc')
   scope :today, lambda { 

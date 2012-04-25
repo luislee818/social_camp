@@ -10,8 +10,9 @@
 #
 
 class User < ActiveRecord::Base
-  has_many :events
-  has_many :discussions
+  has_many :events, dependent: :destroy
+  has_many :discussions, dependent: :destroy
+  has_many :comments, dependent: :destroy
   
   attr_accessible :email, :name, :password, :password_confirmation
 

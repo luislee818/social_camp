@@ -5,6 +5,10 @@
       <h1>
         <%= gravatar_for @user %>
         <%= @user.name %>
+
+		<% if current_user.admin? && !current_user?(@user) %>
+		    <%= link_to "delete", @user, method: :delete, confirm: "You sure?" %>
+		 <% end %>
       </h1>
     </section>
   </aside>
