@@ -15,7 +15,7 @@
 				</div>
 				<hr/>
 			    <div class="history-container">
-			        <%= render partial: 'shared/changelogs', object: @discussion.changelogs %>
+			        <%= render partial: 'shared/changelogs_mini', object: @discussion.changelogs, as: 'changelogs' %>
 			    </div>
 				<% if current_user == @discussion.user || current_user.admin? %>
 					<div class="edit-delete">

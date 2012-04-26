@@ -8,7 +8,7 @@ SocialCamp::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :discussions
   resources :events
-  resources :comments, only: [:create, :edit, :update, :destroy]
+  resources :comments, only: [:create, :edit, :show, :update, :destroy]
   
   # user profile
   match '/signup', to: 'users#new'
@@ -19,6 +19,9 @@ SocialCamp::Application.routes.draw do
   match '/help', to: 'static_pages#help'
   match '/about', to: 'static_pages#about'
   match '/contact', to: 'static_pages#contact'
+
+  # progresses
+  match 'progress', to: 'progresses#all'
   
   
 

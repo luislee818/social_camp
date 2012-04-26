@@ -7,12 +7,18 @@ class CommentsController < ApplicationController
   	comment.user_id = current_user.id
 
   	if comment.save
-      log_change comment, ActionType::ADD
+      log_add comment
 
   		redirect_to discussion, flash: { success: "Comment had been created." }
   	else
   		redirect_to discussion, flash: { error: "Comment was not created, please try again."}
   	end
+  end
+
+  def show
+    @comment = Comment.includes(:discussion).find(params[:id])
+
+    redirect_to @comment.discussion
   end
 
   def edit
@@ -32,7 +38,7 @@ class CommentsController < ApplicationController
     
     @comment.update_attributes(params[:comment])
 
-    log_change @comment, ActionType::UPDATE
+    log_update @comment
     
     redirect_to @comment.discussion, flash: { success: "Comment had been updated." }
   end
@@ -45,8 +51,7 @@ class CommentsController < ApplicationController
     end
     
     @comment.destroy
-
-    log_change @comment, ActionType::DESTROY
+    log_destroy @comment
     
     redirect_to @comment.discussion, flash: { success: "Comment had been destroyed." }
   end

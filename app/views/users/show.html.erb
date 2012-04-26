@@ -1,15 +1,28 @@
 <% provide(:title, @user.name) %>
-<div class="row">
-  <aside class="span4">
-    <section>
-      <h1>
-        <%= gravatar_for @user %>
-        <%= @user.name %>
 
-		<% if current_user.admin? && !current_user?(@user) %>
-		    <%= link_to "delete", @user, method: :delete, confirm: "You sure?" %>
-		 <% end %>
-      </h1>
-    </section>
-  </aside>
-</div>
+
+<div class="row">
+        <div class="span10 offset1">
+          <header>
+            <div class="large-avatar">
+            <figure><%= gravatar_for @user %></figure>
+            </div>
+            <div class="user-info">
+            <h2><%= @user.name %></h2>
+            <%= @user.email %>
+
+          <% if current_user.admin? && !current_user?(@user) %>
+              <%= link_to "delete", @user, method: :delete, confirm: "You sure?" %>
+           <% end %>
+           </div>
+          </header>
+          
+          
+          <hr/>
+          <secton>
+          <%= render partial: 'shared/changelog_full', collection: @changelogs, as: 'changelog', locals: { show_user: false } %>
+
+          <%= will_paginate @changelogs %>
+        </section>
+        </div>
+      </div>

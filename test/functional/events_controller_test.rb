@@ -72,8 +72,7 @@ class EventsControllerTest < ActionController::TestCase
     post :create, event: { name: event_name, start_at: event_datetime }
 
     created_event = Event.find_by_name event_name
-
-    changelog = Changelog.last
+    changelog = Changelog.of_trackable(created_event).last
 
     assert_equal created_event, changelog.trackable
     assert_equal ActionType::ADD, changelog.action_type_id
@@ -247,8 +246,7 @@ class EventsControllerTest < ActionController::TestCase
     assert_redirected_to event
 
     updated_event = Event.find event.id
-
-    changelog = Changelog.last
+    changelog = Changelog.of_trackable(updated_event).last
 
     assert_equal updated_event, changelog.trackable
     assert_equal ActionType::UPDATE, changelog.action_type_id
@@ -311,14 +309,38 @@ class EventsControllerTest < ActionController::TestCase
     sign_in user
 
     event = events(:one) # event created by john
+    final_words = event.final_words
     delete :destroy, id: event.id
 
     event_attempted_to_destroy = Event.find_by_id event.id
 
-    changelog = Changelog.last
+    changelog = Changelog.find_all_by_trackable_type_and_trackable_id(
+                            'Event', event.id)
+                            .last
 
-    assert_equal event_attempted_to_destroy, changelog.trackable
+    assert event_attempted_to_destroy.nil?
+    assert_equal final_words, changelog.destroyed_content_summary
     assert_equal ActionType::DESTROY, changelog.action_type_id
     assert_equal user.id, changelog.user_id
+  end
+
+  test "upon successful event destroy by admin there should be a changelog" do
+    admin = users(:admin)
+    sign_in admin
+
+    event = events(:one) # event created by john
+    final_words = event.final_words
+    delete :destroy, id: event.id
+
+    event_attempted_to_destroy = Event.find_by_id event.id
+
+    changelog = Changelog.find_all_by_trackable_type_and_trackable_id(
+                            'Event', event.id)
+                            .last
+
+    assert event_attempted_to_destroy.nil?
+    assert_equal final_words, changelog.destroyed_content_summary
+    assert_equal ActionType::DESTROY, changelog.action_type_id
+    assert_equal admin.id, changelog.user_id
   end
 end

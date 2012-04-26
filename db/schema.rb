@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120425055551) do
+ActiveRecord::Schema.define(:version => 20120426023043) do
 
   create_table "action_types", :force => true do |t|
     t.string   "name"
@@ -24,8 +24,9 @@ ActiveRecord::Schema.define(:version => 20120425055551) do
     t.string   "trackable_type"
     t.integer  "user_id"
     t.integer  "action_type_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.string   "destroyed_content_summary"
   end
 
   create_table "comments", :force => true do |t|

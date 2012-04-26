@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :require_login, only: [:index, :edit, :update]
+  before_filter :require_login, only: [:index, :show, :edit, :update]
   before_filter :require_current_user, only: [:edit, :update]
   before_filter :require_admin, only: [:destroy]
   
@@ -24,6 +24,7 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+    @changelogs = @user.changelogs.paginate(page: params[:page], per_page: 20)
   end
   
   def edit
@@ -41,7 +42,8 @@ class UsersController < ApplicationController
   end
   
   def destroy
-    user_to_delete = User.find(params[:id])
+    user_to_delete = User.includes(:events, :discussions, :comments).find(params[:id])
+
     unless current_user == user_to_delete
       user_to_delete.destroy
       flash[:success] = "User #{user_to_delete.name} had been destroyed."

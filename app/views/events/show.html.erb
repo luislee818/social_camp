@@ -28,7 +28,7 @@
     </p>
     <hr/>
     <div class="history-container">
-        <%= render partial: 'shared/changelogs', object: @event.changelogs %>
+        <%= render partial: 'shared/changelogs_mini', object: @event.changelogs, as: 'changelogs' %>
     </div>
 
     <%= link_to 'All Events', events_path %>

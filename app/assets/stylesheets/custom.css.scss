@@ -76,6 +76,11 @@ ul.changelogs-mini {
 	}
 }
 
+.timestamp {
+	color: $grayLight;
+	font-style: italic;
+}
+
 /* typography */
 
 /*h1, h2, h3, h4, h5, h6 {
@@ -200,6 +205,15 @@ input, textarea, select, .uneditable-input {
 	    }
 	  }
 	}
+
+	.large-avatar {
+		float: left;
+	}
+
+	.user-info {
+		padding: 1% 0.5%;
+		overflow-y: auto;
+	}
 }
 
 
@@ -242,11 +256,11 @@ input, textarea, select, .uneditable-input {
 		padding-bottom: 2%;
 	}
 	
-	.timestamp {
+	/*.timestamp {
 		font-size: 0.75em;
 		float: right;
 		clear: right;
-	}
+	}*/
 	
 	.edit-delete {
 		float: left;
@@ -302,7 +316,8 @@ input, textarea, select, .uneditable-input {
 		}
 
 		&.timestamp-column {
-			
+			color: $grayLight;
+			font-style: italic;
 		}
 
 		&.badge-column {

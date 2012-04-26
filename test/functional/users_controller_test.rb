@@ -15,12 +15,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_select 'title', 'SocialCamp | Sign up'
   end
   
-  test "show page should display user name in h1" do
-    get :show, id: @user
-    assert_response :success
-    assert_select 'h1', @user.name
-  end
-  
   # Sign up----------------------------------------------
   
   test "user should sign up with valid information" do
@@ -50,10 +44,18 @@ class UsersControllerTest < ActionController::TestCase
     get :edit, id: user.id
     assert_redirected_to signin_path
   end
+
+  # Show user----------------------------------------------
+  
+  test "user should sign in before visiting show profile page" do
+    make_sure_user_is_not_signed_in
+    get :show, id: @user
+    assert_redirected_to signin_path
+  end
   
   # Edit profile----------------------------------------------
   
-  test "Edit profile page title should be 'SocialCamp | Edit profile'" do
+  test "edit profile page title should be 'SocialCamp | Edit profile'" do
     user = users(:john)
     sign_in user
     get :edit, id: user.id
@@ -131,7 +133,7 @@ class UsersControllerTest < ActionController::TestCase
     jane_after_delete = User.find_by_name jane.name
     assert jane_after_delete.nil?
   end
-  
+
   test "admin should not be able to delete her own account" do
     admin = users(:admin)
     sign_in admin
@@ -142,6 +144,82 @@ class UsersControllerTest < ActionController::TestCase
     
     admin_after_delete_attempt = User.find_by_name admin.name
     refute admin_after_delete_attempt.nil?
+  end
+
+  test "upon successful account destroy events of that user should be destroyed" do
+    admin = users(:admin)
+    sign_in admin
+
+    user_to_delete = users(:john)
+
+    events = user_to_delete.events.dup
+
+    delete :destroy, id: user_to_delete.id
+
+    assert events.count > 0
+
+    events.each do |obj|
+      obj_in_search = Event.find_by_id obj.id
+
+      assert obj_in_search.nil?
+    end
+  end
+
+  test "upon successful account destroy discussions of that user should be destroyed" do
+    admin = users(:admin)
+    sign_in admin
+
+    user_to_delete = users(:john)
+
+    discussions = user_to_delete.discussions.dup
+
+    delete :destroy, id: user_to_delete.id
+
+    assert discussions.count > 0
+
+    discussions.each do |obj|
+      obj_in_search = Event.find_by_id obj.id
+
+      assert obj_in_search.nil?
+    end
+  end
+
+  test "upon successful account destroy comments of that user should be destroyed" do
+    admin = users(:admin)
+    sign_in admin
+
+    user_to_delete = users(:john)
+
+    comments = user_to_delete.comments.dup
+
+    delete :destroy, id: user_to_delete.id
+
+    assert comments.count > 0
+
+    comments.each do |obj|
+      obj_in_search = Event.find_by_id obj.id
+
+      assert obj_in_search.nil?
+    end
+  end
+
+  test "upon successful account destroy changelogs of that user should be destroyed" do
+    admin = users(:admin)
+    sign_in admin
+
+    user_to_delete = users(:john)
+
+    changelogs = user_to_delete.changelogs.dup
+
+    delete :destroy, id: user_to_delete.id
+
+    assert changelogs.count > 0
+
+    changelogs.each do |obj|
+      obj_in_search = Event.find_by_id obj.id
+
+      assert obj_in_search.nil?
+    end
   end
 
 end

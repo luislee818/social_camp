@@ -1,0 +1,9 @@
+<p><%= raw display_full_log changelog, show_user: show_user %>
+	&nbsp;
+	<% if date_is_today changelog.updated_at  %>
+		<span class="label label-success" title="Updated Today">Today</span>
+	<% end %>
+	<% if date_is_yesterday changelog.updated_at %>
+		<span class="label label-warning"  title="Updated Yesterday">Yesterday</span>
+	<% end %>
+</p>

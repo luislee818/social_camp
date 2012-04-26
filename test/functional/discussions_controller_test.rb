@@ -72,7 +72,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     post :create, discussion: { subject: discussion_subject, content: discussion_content }
 
     created_discussion = Discussion.find_by_subject discussion_subject
-    changelog = Changelog.last
+    changelog = Changelog.of_trackable(created_discussion).last
 
     assert_equal created_discussion, changelog.trackable
     assert_equal ActionType::ADD, changelog.action_type_id
@@ -225,8 +225,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert_redirected_to discussion
 
     updated_discussion = Discussion.find discussion.id
-
-    changelog = Changelog.last
+    changelog = Changelog.of_trackable(updated_discussion).last
 
     assert_equal updated_discussion, changelog.trackable
     assert_equal ActionType::UPDATE, changelog.action_type_id
@@ -285,20 +284,86 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert discussion_attempted_to_destroy.nil?
   end
 
-  test "upon successful discussion destroy there should be a changelog" do
+  test "upon successful discussion destroy there should be a changelog for discussion" do
     user = users(:john)
     sign_in user
 
     discussion = discussions(:one) # discussion created by john
+    final_words = discussion.final_words
     delete :destroy, id: discussion.id
 
     discussion_attempted_to_destroy = Discussion.find_by_id discussion.id
 
-    changelog = Changelog.last
+    changelog = Changelog.find_all_by_trackable_type_and_trackable_id(
+                            'Discussion', discussion.id)
+                          .last
 
-    assert_equal discussion_attempted_to_destroy, changelog.trackable
+    assert discussion_attempted_to_destroy.nil?
+    assert_equal final_words, changelog.destroyed_content_summary
     assert_equal ActionType::DESTROY, changelog.action_type_id
     assert_equal user.id, changelog.user_id
+  end
+
+  test "upon successful discussion destroy comments should be destroyed" do
+    user = users(:john)
+    sign_in user
+
+    discussion = discussions(:one) # discussion created by john
+    comments = discussion.comments.dup
+
+    delete :destroy, id: discussion.id
+
+    assert comments.count > 0
+
+    comments.each do |c|
+      comment = Comment.find_by_id c.id
+      assert comment.nil?
+    end
+  end
+
+  test "upon successful discussion destroy there should be changelogs for comments" do
+    user = users(:john)
+    sign_in user
+
+    discussion = discussions(:one) # discussion created by john
+
+    comments = discussion.comments.dup
+    delete :destroy, id: discussion.id
+
+    assert comments.count > 0
+
+    comments.each do |c|
+      changelog = Changelog.find_all_by_trackable_type_and_trackable_id(
+                            'Comment', c.id)
+                            .last
+
+      assert_equal c.final_words, changelog.destroyed_content_summary
+      assert_equal ActionType::DESTROY, changelog.action_type_id
+      assert_equal user.id, changelog.user_id             
+    end
+  end
+
+  test "upon successful discussion destroy by admin there should be changelogs for comments" do
+    admin = users(:admin)
+    sign_in admin
+
+    discussion = discussions(:one) # discussion created by john
+
+    comments = discussion.comments.dup
+    
+    delete :destroy, id: discussion.id
+
+    assert comments.count > 0
+
+    comments.each do |c|
+      changelog = Changelog.find_all_by_trackable_type_and_trackable_id(
+                            'Comment', c.id)
+                            .last
+
+      assert_equal c.final_words, changelog.destroyed_content_summary
+      assert_equal ActionType::DESTROY, changelog.action_type_id
+      assert_equal admin.id, changelog.user_id             
+    end
   end
 
 end

@@ -1,0 +1,10 @@
+<% provide(:title, 'Progress') %>
+<h1>What's been happening...</h1>
+
+<div class="row">
+	<div class="span10 offset1">
+		<%= render partial: 'shared/changelog_full', collection: @changelogs, as: 'changelog', locals: { show_user: true } %>
+
+		<%= will_paginate @changelogs %>
+	</div>
+</div>

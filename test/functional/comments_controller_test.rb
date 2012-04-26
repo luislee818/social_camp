@@ -54,11 +54,32 @@ class CommentsControllerTest < ActionController::TestCase
     post :create, discussion_id: discussion.id, comment: { content: comment_content }
 
     created_comment = Comment.last
-    changelog = Changelog.last
+    changelog = Changelog.of_trackable(created_comment).last
 
     assert_equal created_comment, changelog.trackable
     assert_equal ActionType::ADD, changelog.action_type_id
     assert_equal user.id, changelog.user_id
+  end
+
+  # Show comment-------------------------------------------------
+
+  test "user should signin before viewing a comment" do
+    make_sure_user_is_not_signed_in
+    
+    comment = comments(:one)
+    get :show, id: comment.id
+
+    assert_redirected_to signin_path
+  end
+
+  test "user should be redirected to discussion when viewing a comment" do
+    user = users(:jane)
+    sign_in user
+    
+    comment = comments(:one)
+    get :show, id: comment.id
+
+    assert_redirected_to comment.discussion
   end
   
   # Edit comment-------------------------------------------------
@@ -162,8 +183,7 @@ class CommentsControllerTest < ActionController::TestCase
     assert_redirected_to comment.discussion
 
     updated_comment = Comment.find comment.id
-
-    changelog = Changelog.last
+    changelog = Changelog.of_trackable(updated_comment).last
 
     assert_equal updated_comment, changelog.trackable
     assert_equal ActionType::UPDATE, changelog.action_type_id
@@ -226,15 +246,35 @@ class CommentsControllerTest < ActionController::TestCase
     sign_in user
 
     comment = comments(:one) # comment created by john
+    final_words = comment.final_words
     delete :destroy, id: comment.id
 
     comment_attempted_to_destroy = Comment.find_by_id comment.id
 
-    changelog = Changelog.last
+    changelog = Changelog.of_trackable(comment).last
 
-    assert_equal comment_attempted_to_destroy, changelog.trackable
+    assert comment_attempted_to_destroy.nil?
+    assert_equal final_words, changelog.destroyed_content_summary
     assert_equal ActionType::DESTROY, changelog.action_type_id
     assert_equal user.id, changelog.user_id
+  end
+
+  test "upon successful comment destroy by admin there should be a changelog" do
+    admin = users(:admin)
+    sign_in admin
+
+    comment = comments(:one) # comment created by john
+    final_words = comment.final_words
+    delete :destroy, id: comment.id
+
+    comment_attempted_to_destroy = Comment.find_by_id comment.id
+
+    changelog = Changelog.of_trackable(comment).last
+
+    assert comment_attempted_to_destroy.nil?
+    assert_equal final_words, changelog.destroyed_content_summary
+    assert_equal ActionType::DESTROY, changelog.action_type_id
+    assert_equal admin.id, changelog.user_id
   end
 
 end

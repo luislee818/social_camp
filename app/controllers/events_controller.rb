@@ -51,7 +51,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        log_change @event, ActionType::ADD
+        log_add @event
 
         format.html { redirect_to events_path, flash: { success: 'Event had been created.' } }
         format.json { render json: @event, status: :created, location: @event }
@@ -73,7 +73,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.update_attributes(params[:event])
-        log_change @event, ActionType::UPDATE
+        log_update @event
 
         format.html { redirect_to @event, flash: { success: 'Event had been updated.' } }
         format.json { head :no_content }
@@ -94,8 +94,7 @@ class EventsController < ApplicationController
     end
 
     @event.destroy
-
-    log_change @event, ActionType::DESTROY
+    log_destroy @event
 
     respond_to do |format|
       format.html { redirect_to events_url, flash: { success: "Event #{@event.name} had been destroyed." } }

@@ -1,4 +1,6 @@
 class Discussion < ActiveRecord::Base
+  include FinalWordsCollector
+
   belongs_to :user
   has_many :comments, dependent: :destroy
   has_many :changelogs, as: :trackable
@@ -15,6 +17,10 @@ class Discussion < ActiveRecord::Base
   validates :subject, presence: true, length: { maximum: 50 }
   validates :content, presence: true
   validates :user_id, presence: true
+
+  def display_title
+    subject
+  end
 
   def last_update_content
     if comments.count == 0
@@ -39,7 +45,7 @@ class Discussion < ActiveRecord::Base
       last_comment.updated_at
     end
   end
-
+  
   private
 
     def last_comment
