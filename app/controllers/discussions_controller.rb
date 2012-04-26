@@ -5,8 +5,7 @@ class DiscussionsController < ApplicationController
   # GET /discussions.json
   def index
     @discussions = Discussion.includes(:user)
-                  .sort_by { |d| d.last_update_time }
-                  .reverse
+                  .order('updated_at DESC')
                   .paginate(page: params[:page])
 
     respond_to do |format|

@@ -1,0 +1,13 @@
+<tr>
+	<td>
+		<%= event.start_at.strftime("%B %d") %>&nbsp;
+
+		<% if date_is_today event.start_at  %>
+			<span class="label label-success">Today</span>
+		<% end %>
+		<% if date_is_tomorrow event.start_at  %>
+			<span class="label label-info">Tomorrow</span>
+		<% end %><br/>
+		<%= link_to truncate(event.name, length: 32), event %>
+	</td>
+</tr>

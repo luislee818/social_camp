@@ -5,15 +5,19 @@
 		<%= link_to 'New Event', new_event_path %>
 
 		<% unless @upcoming_events.empty? %>
-			<hr/>
-			<h2>Upcoming Events</h2>
-			<%= render partial: 'event_summary', collection: @upcoming_events, as: "event" %>
+			<div class="events-container">
+				<h2>Upcoming Events</h2>
+				<hr/>
+				<%= render partial: 'event_summary', collection: @upcoming_events, as: "event" %>
+			</div>
 		<% end %>
 
 		<% unless @past_events.empty? %>
-			<hr/>
-			<h2>Past Events</h2>
-			<%= render partial: 'event_summary', collection: @past_events, as: "event" %>
+			<div class="events-container">
+				<h2>Past Events</h2>
+				<hr/>
+				<%= render partial: 'event_summary', collection: @past_events, as: "event" %>
+			</div>
 		<% end %>
 	</div>
 </div>

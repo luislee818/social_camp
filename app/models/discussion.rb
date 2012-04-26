@@ -39,11 +39,11 @@ class Discussion < ActiveRecord::Base
   end
 
   def last_update_time
-    if comments.count == 0
-      updated_at
-    else
-      last_comment.updated_at
-    end
+    updated_at
+  end
+
+  def touch
+    update_attribute :updated_at, Time.now
   end
   
   private

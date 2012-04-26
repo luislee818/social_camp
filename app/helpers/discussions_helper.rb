@@ -1,5 +1,3 @@
 module DiscussionsHelper
-
-  
-  
+ 
 end

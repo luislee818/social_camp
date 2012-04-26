@@ -8,6 +8,7 @@ class CommentsController < ApplicationController
 
   	if comment.save
       log_add comment
+      discussion.touch
 
   		redirect_to discussion, flash: { success: "Comment had been created." }
   	else
@@ -39,6 +40,7 @@ class CommentsController < ApplicationController
     @comment.update_attributes(params[:comment])
 
     log_update @comment
+    @comment.discussion.touch
     
     redirect_to @comment.discussion, flash: { success: "Comment had been updated." }
   end
@@ -52,6 +54,7 @@ class CommentsController < ApplicationController
     
     @comment.destroy
     log_destroy @comment
+    @comment.discussion.touch
     
     redirect_to @comment.discussion, flash: { success: "Comment had been destroyed." }
   end

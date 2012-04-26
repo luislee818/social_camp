@@ -1,0 +1,21 @@
+<%= provide(:title, 'Dashboard') %>
+
+<div class="row">
+	<div class="span9">
+		<h3>Discussions</h3>
+		<table class="table">
+			<tbody>
+				<%= render partial: 'discussions/discussion_summary', collection: @discussions, as: "discussion" %>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="span3">
+		<h3>Upcoming Events</h3>
+		<table class="table">
+			<tbody>
+				<%= render partial: 'events/event_summary_mini', collection: @upcoming_events, as: "event" %>
+			</tbody>
+		</table>
+	</div>
+</div>

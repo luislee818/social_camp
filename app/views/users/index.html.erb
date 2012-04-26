@@ -1,12 +1,12 @@
 <% provide(:title, 'People') %>
-<h1>All users</h1>
+
 <div class="row">
 	<div class="span10 offset1">
-
+		<h2>All users</h2>
 		<ul class="user-list">
 		  <% @users.each do |user| %>
 		    <li>
-		      <%= gravatar_for user, size: 52 %>&nbsp;
+		      <%= gravatar_for user, size: 36 %>&nbsp;
 		      <%= link_to user.name, user %>
 			  <% if current_user.admin? && !current_user?(user) %>
 			    | <%= link_to "delete", user, method: :delete, confirm: "You sure?" %>

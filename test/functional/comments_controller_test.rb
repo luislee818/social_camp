@@ -61,6 +61,24 @@ class CommentsControllerTest < ActionController::TestCase
     assert_equal user.id, changelog.user_id
   end
 
+  test "upon successful comment creation updated_at of discussion should be updated" do
+    user = users(:john)
+    sign_in user
+
+    discussion = discussions(:one)
+    discussion_old_timestamp = discussion.updated_at
+
+    comment_content = "Lorem Ipsum"
+
+    post :create, discussion_id: discussion.id, comment: { content: comment_content }
+
+    created_comment = Comment.last
+    discussion.reload
+    discussion_new_timestamp = discussion.updated_at
+
+    assert discussion_new_timestamp > discussion_old_timestamp
+  end
+
   # Show comment-------------------------------------------------
 
   test "user should signin before viewing a comment" do
@@ -189,6 +207,23 @@ class CommentsControllerTest < ActionController::TestCase
     assert_equal ActionType::UPDATE, changelog.action_type_id
     assert_equal user.id, changelog.user_id
   end
+
+  test "upon successful comment update updated_at of discussion should be updated" do
+    user = users(:john)
+    sign_in user
+
+    discussion = discussions(:one)
+    discussion_old_timestamp = discussion.updated_at
+
+    comment = comments(:one) # comment created by John
+    updated_content = "Lorem Ipsum"
+    put :update, id: comment.id, comment: { content: updated_content }
+
+    discussion.reload
+    discussion_new_timestamp = discussion.updated_at
+
+    assert discussion_new_timestamp > discussion_old_timestamp
+  end
   
   # Destroy comment-------------------------------------------------
   test "user should login before destroy a comment" do
@@ -275,6 +310,22 @@ class CommentsControllerTest < ActionController::TestCase
     assert_equal final_words, changelog.destroyed_content_summary
     assert_equal ActionType::DESTROY, changelog.action_type_id
     assert_equal admin.id, changelog.user_id
+  end
+
+  test "upon successful comment destroy updated_at of discussion should be updated" do
+    user = users(:john)
+    sign_in user
+
+    discussion = discussions(:one)
+    discussion_old_timestamp = discussion.updated_at
+
+    comment = comments(:one) # comment created by John
+    delete :destroy, id: comment.id
+
+    discussion.reload
+    discussion_new_timestamp = discussion.updated_at
+
+    assert discussion_new_timestamp > discussion_old_timestamp
   end
 
 end

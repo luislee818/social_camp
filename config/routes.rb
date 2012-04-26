@@ -2,6 +2,9 @@ SocialCamp::Application.routes.draw do
 
   # root
   root :to => 'static_pages#home'
+
+  # dashboard
+  match "/dashboard", to: 'dashboard#home'
   
   # resources
   resources :users
@@ -21,7 +24,7 @@ SocialCamp::Application.routes.draw do
   match '/contact', to: 'static_pages#contact'
 
   # progresses
-  match 'progress', to: 'progresses#all'
+  match '/progress', to: 'progresses#all'
   
   
 
