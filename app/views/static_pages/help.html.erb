@@ -1,3 +1,35 @@
 <% provide(:title, "Help") %>
 <h1>Help</h1>
-<p>This is the help page.</p>
+<p>Welcome to SocialCamp version <span title="Alpha 0.5"><strong>&#945; 0.5</strong></span>.</p>
+<hr/>
+<h3>What can I do on SocialCamp now (obviously it's... raw)?</h3>
+
+<p>Yes, what you're looking at is the first sprint of SocialCamp, it's just a start. More features will be added soon, here are what you can start with:</p>
+
+<h5>Sign Up</h5>
+<p>You will need to sign up before viewing the contents of SocialCamp, your password is <a href='http://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html#method-i-has_secure_password'>safe</a>. If you don't trust me on that I totally understand, pick a random strong password - but please do keep it somewhere - SocialCamp doesn't have a 'forget password' function yet, you've been warned.</p>
+
+<h5>Discussion</h5>
+<p>Share your discoveries, ask questions, and comment.<br/>
+<%= link_to 'Go to discussions now', discussions_path %></p>
+
+<h5>Events</h5>
+<p>What events are coming up?<br/>
+	<%= link_to 'Go to events now', discussions_path %></p>
+
+<h5>Progress</h5>
+<p>Not been here for a while, want to catch up? Catch-all progress and personal progress pages can be helpful.<br/>
+Check out <%= link_to 'catch-all progress', progress_path %> or <%= link_to 'personal progress of some dude', user_path(id: 1) %></p>
+
+<h5>Avatar</h5>
+<p>If you want an avatar for your account, please register an account on <a href='http://gravatar.com'>Gravatar</a> <em>with the email address you are using in SocialCamp</em>. Once you have uploaded your avatar to Gravatar, it will show up on SocialCamp.</p>
+
+<hr/>
+
+<h3>Comments? Wait, you found a bug?</h3>
+<p>You can find our contact info at <%= link_to 'Contact Us', contact_path %> page.</p>
+
+<hr/>
+
+<h3>Source Code</h3>
+<p>The source code of SocialCamp can be found on <a href="https://github.com/luislee818/social_camp">Github</a>.</p>

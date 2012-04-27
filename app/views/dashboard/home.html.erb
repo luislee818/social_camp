@@ -8,6 +8,8 @@
 				<%= render partial: 'discussions/discussion_summary', collection: @discussions, as: "discussion" %>
 			</tbody>
 		</table>
+		<hr/>
+		<%= link_to "All Discussions", discussions_path %>
 	</div>
 
 	<div class="span3">
@@ -17,5 +19,7 @@
 				<%= render partial: 'events/event_summary_mini', collection: @upcoming_events, as: "event" %>
 			</tbody>
 		</table>
+		<hr/>
+		<%= link_to "All Events", events_path %>
 	</div>
 </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120426023043) do
+ActiveRecord::Schema.define(:version => 20120427135054) do
 
   create_table "action_types", :force => true do |t|
     t.string   "name"
@@ -29,6 +29,10 @@ ActiveRecord::Schema.define(:version => 20120426023043) do
     t.string   "destroyed_content_summary"
   end
 
+  add_index "changelogs", ["trackable_id"], :name => "index_changelogs_on_trackable_id"
+  add_index "changelogs", ["trackable_type"], :name => "index_changelogs_on_trackable_type"
+  add_index "changelogs", ["user_id"], :name => "index_changelogs_on_user_id"
+
   create_table "comments", :force => true do |t|
     t.integer  "discussion_id"
     t.text     "content"
@@ -37,6 +41,9 @@ ActiveRecord::Schema.define(:version => 20120426023043) do
     t.datetime "updated_at",    :null => false
   end
 
+  add_index "comments", ["discussion_id"], :name => "index_comments_on_discussion_id"
+  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
   create_table "discussions", :force => true do |t|
     t.string   "subject"
     t.text     "content"
@@ -44,6 +51,8 @@ ActiveRecord::Schema.define(:version => 20120426023043) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "discussions", ["user_id"], :name => "index_discussions_on_user_id"
 
   create_table "events", :force => true do |t|
     t.string   "name"
@@ -54,6 +63,9 @@ ActiveRecord::Schema.define(:version => 20120426023043) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  add_index "events", ["start_at"], :name => "index_events_on_start_at"
+  add_index "events", ["user_id"], :name => "index_events_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"
