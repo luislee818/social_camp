@@ -14,5 +14,8 @@
 /log/*.log
 /tmp
 
+# Ignore test coverage tool generated files
+/coverage
+
 # Ignore Heroku .env file
 .env
