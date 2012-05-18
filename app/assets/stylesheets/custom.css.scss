@@ -18,6 +18,29 @@
           border-radius: 9px;
 }
 
+/* override Bootstrap's hero-unit setting for non-pc screens */
+/* http://css-tricks.com/snippets/css/media-queries-for-standard-devices/ */
+
+/* iPhone 4 ----------- */
+@media only screen 
+	and (-webkit-min-device-pixel-ratio : 1.5), only screen 
+	and (min-device-pixel-ratio : 1.5) {
+
+	.hero-unit { 
+		h1 {
+		    font-size: 30px;
+	    }
+
+	    h2 {
+		    font-size: 12px;
+	    }
+
+	    .btn-large {
+	    	@extend .btn-small;
+	    }
+	}
+}
+
 /* mixins, variables, etc. */
 
 $grayMediumLight: #eaeaea;
