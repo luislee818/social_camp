@@ -10,7 +10,7 @@ xml.rss "version" => "2.0",
       xml.item do
         xml.title display_text_log(changelog)
         xml.link get_trackable_url(changelog) if get_trackable_url(changelog)
-        xml.description display_full_log(changelog)
+        xml.description display_full_log(changelog, show_relative_timestamp: false)
         xml.pubDate CGI.rfc1123_date(changelog.updated_at)
         xml.guid changelog.id, { isPermaLink: false }
         xml.author "#{changelog.user.email} (#{h changelog.user.name})"

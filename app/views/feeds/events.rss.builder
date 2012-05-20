@@ -10,7 +10,7 @@ xml.rss "version" => "2.0",
       xml.item do
         xml.title display_text_log(event_update)
         xml.link get_trackable_url(event_update) if get_trackable_url(event_update)
-        xml.description display_full_log(event_update)
+        xml.description display_full_log(event_update, show_relative_timestamp: false)
         xml.pubDate CGI.rfc1123_date(event_update.updated_at)
         xml.guid event_update.id, { isPermaLink: false }
         xml.author "#{event_update.user.email} (#{h event_update.user.name})"

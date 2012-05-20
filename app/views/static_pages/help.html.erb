@@ -1,6 +1,6 @@
 <% provide(:title, "Help") %>
 <h1>Help</h1>
-<p>Welcome to SocialCamp version <span title="Alpha 0.5"><strong>&#945; 0.5</strong></span>.</p>
+<p>Welcome to SocialCamp version <strong>alpha 0.6</strong> (<a href="#changelog">changelog</a>).</p>
 <hr/>
 <h3>What can I do on SocialCamp now (obviously it's... raw)?</h3>
 
@@ -21,6 +21,9 @@
 <p>Not been here for a while, want to catch up? Catch-all progress and personal progress pages can be helpful.<br/>
 Check out <%= link_to 'catch-all progress', progress_path %> or <%= link_to 'personal progress of some dude', user_path(id: 1) %></p>
 
+<h5>RSS</h5>
+<p>Now you can subscribe to updates of Discussions, Events and All Progresses via RSS feeds.</p>
+
 <h5>Avatar</h5>
 <p>If you want an avatar for your account, please register an account on <a href='http://gravatar.com'>Gravatar</a> <em>with the email address you are using in SocialCamp</em>. Once you have uploaded your avatar to Gravatar, it will show up on SocialCamp.</p>
 
@@ -33,3 +36,23 @@ Check out <%= link_to 'catch-all progress', progress_path %> or <%= link_to 'per
 
 <h3>Source Code</h3>
 <p>The source code of SocialCamp can be found on <a href="https://github.com/luislee818/social_camp">Github</a>.</p>
+
+<hr/>
+
+<h3 id="changelog">Changelog</h3>
+<p>
+	<h4>Alpha 0.6</h4>
+	<span class="release_date">Release Date: May 20, 2012</span>
+	<ul>
+		<li>Added: RSS feed for Discussions, Events and All Progresses</li>
+		<li>Fixed: Internet Explorer now should able to display SocialCamp</li>
+		<li>Fixed: Display scale in iPhone, responsive menu bar on mobile devices</li>
+	</ul>
+</p>
+<p>
+	<h4>Alpha 0.5</h4>
+	<span class="release_date">Release Date: May 3, 2012</span>
+	<ul>
+		<li>Initial Release: Users, Discussions, Events, Progresses</li>
+	</ul>
+</p>

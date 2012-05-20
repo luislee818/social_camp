@@ -40,7 +40,10 @@ module ChangelogHelper
   	"#{verb.capitalize} #{time} ago by #{user.name}" unless user.nil?
   end
 
-  def display_full_log(log, options = { show_user: true })
+  def display_full_log(log, options = {})
+    default_options = { show_user: true, show_relative_timestamp: true }
+    options = default_options.merge(options)
+    
     user = User.find_by_id log.user_id
     
     unless user.nil?
@@ -48,6 +51,12 @@ module ChangelogHelper
       time = time_ago_in_words log.created_at
       username = user.name
       trackable_type = log.trackable_type
+      
+      if options[:show_relative_timestamp]
+        timestamp = "<span class='timestamp'>#{time_ago_in_words log.created_at}&nbsp;ago</span>"
+      else
+        timestamp = "<span class='timestamp'>on&nbsp;#{log.created_at}</span>"
+      end
 
       if log.trackable.nil? # trackable object had been deleted
         destroy_log = log.get_destroy_log_for_trackable
@@ -65,12 +74,12 @@ module ChangelogHelper
          #{verb}
          #{trackable_type.downcase}
          #{trackable_link}
-         <span class='timestamp'>#{time}&nbsp;ago</span>".html_safe
+         #{timestamp}".html_safe
       else
         "#{verb.capitalize}
          #{trackable_type.downcase}
          #{trackable_link}
-         <span class='timestamp'>#{time}&nbsp;ago</span>".html_safe
+         #{timestamp}".html_safe
       end
      end
   end
