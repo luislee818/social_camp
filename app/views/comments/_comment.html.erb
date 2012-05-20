@@ -5,7 +5,7 @@
 			<%= link_to comment.user.name, comment.user %>
 		</div>
 		<div class="comment-content-container">
-			<div class="comment"><%= sanitize_content comment.content %></div>
+			<div class="comment"><%= sanitize_allow_minimal_html comment.content %></div>
 			<div class="history-container">
 		        <%= render partial: 'shared/changelogs_mini', object: comment.changelogs, as: 'changelogs' %>
 		    </div>

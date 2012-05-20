@@ -1,8 +1,13 @@
 <%= provide(:title, 'Events') %>
 
+<% content_for :feed do %>
+	<%= auto_discovery_link_tag(:rss, :controller => 'feeds', :action => 'events') %>
+<% end %>
+
 <div class="row">
 	<div class="span10 offset1">
 		<%= link_to 'New Event', new_event_path %>
+		<span class='rss'><%= link_to 'Subscribe', feeds_events_path %></span>
 
 		<% unless @upcoming_events.empty? %>
 			<div class="events-container">

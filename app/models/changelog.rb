@@ -25,4 +25,5 @@ class Changelog < ActiveRecord::Base
   									action_type_id: ActionType::DESTROY)
   							.last
   end
+
 end

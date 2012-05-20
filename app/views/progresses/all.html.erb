@@ -1,7 +1,12 @@
 <% provide(:title, 'Progress') %>
 
+<% content_for :feed do %>
+	<%= auto_discovery_link_tag(:rss, :controller => 'feeds', :action => 'progresses') %>
+<% end %>
+
 <div class="row">
 	<div class="span10 offset1">
+		<span class='rss'><%= link_to 'Subscribe', feeds_progresses_path %></span>
 		<h2>What's been happening...</h2>
 		<hr/>
 		<%= render partial: 'shared/changelog_full', collection: @changelogs, as: 'changelog', locals: { show_user: true } %>

@@ -352,4 +352,15 @@ input, textarea, select, .uneditable-input {
 		}
 
 	}
+
+}
+
+/* RSS */
+.rss {
+	float: right;
+	
+	a {
+		padding: 0 0 0 19px;
+		background: url('http://www.rssboard.org/images/rss-icon.png') no-repeat 0 50%;
+	}
 }

@@ -10,7 +10,7 @@
 			</div>
 			<div class="discussion-content-container">
 				<div class="discussion">
-					<%= sanitize_content @discussion.content %><br/>
+					<%= sanitize_allow_minimal_html @discussion.content %><br/>
 				</div>
 				<hr/>
 			    <div class="history-container">

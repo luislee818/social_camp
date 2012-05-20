@@ -1,4 +1,6 @@
 module ChangelogHelper
+  include ApplicationHelper
+
   ACTION_VERBS = {
   	ActionType::ADD => "added",
   	ActionType::UPDATE => "updated",
@@ -44,36 +46,68 @@ module ChangelogHelper
     unless user.nil?
       verb = ACTION_VERBS[log.action_type_id]
       time = time_ago_in_words log.created_at
-      username = sanitize user.name
+      username = user.name
       trackable_type = log.trackable_type
 
       if log.trackable.nil? # trackable object had been deleted
         destroy_log = log.get_destroy_log_for_trackable
 
         display_title = destroy_log.destroyed_content_summary
-        trackable_link = display_title
+        trackable_link = h display_title
       else
-        display_title = truncate((sanitize log.trackable.display_title), length: DISPLAY_TITLE_MAX_LENGTH)
-        trackable_link = link_to(display_title, log.trackable)
+        display_title = truncate(log.trackable.display_title, length: DISPLAY_TITLE_MAX_LENGTH)
+        trackable_link = link_to(display_title, polymorphic_url(log.trackable))  # need absolute url for RSS feeds
       end
 
       if options[:show_user]
         "#{gravatar_for user, size: 18}
-         #{link_to username, user}
+         #{link_to username, url_for(controller: 'users', action: 'show', id: user.id, only_path: false)}
          #{verb}
          #{trackable_type.downcase}
          #{trackable_link}
-         <span class='timestamp'>#{time}&nbsp;ago</span>"
+         <span class='timestamp'>#{time}&nbsp;ago</span>".html_safe
       else
         "#{verb.capitalize}
          #{trackable_type.downcase}
          #{trackable_link}
-         <span class='timestamp'>#{time}&nbsp;ago</span>"
+         <span class='timestamp'>#{time}&nbsp;ago</span>".html_safe
+      end
+     end
+  end
+  
+  def display_text_log(log)
+    user = User.find_by_id log.user_id
+    
+    unless user.nil?
+      verb = ACTION_VERBS[log.action_type_id]
+      username = user.name
+      trackable_type = log.trackable_type
+
+      if log.trackable.nil? # trackable object had been deleted
+        destroy_log = log.get_destroy_log_for_trackable
+
+        display_title = destroy_log.destroyed_content_summary
+      else
+        display_title = truncate(log.trackable.display_title, length: DISPLAY_TITLE_MAX_LENGTH)
       end
 
-      
+      "#{username}
+       #{verb}
+       #{trackable_type.downcase}
+       #{display_title}"
      end
-
   end
-
+  
+  def get_trackable_url(log)
+    return nil if log.trackable.nil?
+    
+    case log.trackable_type
+    when TrackableType::DISCUSSION, TrackableType::COMMENT
+      discussion_url(log.trackable_id)
+    when TrackableType::EVENT
+      event_url(log.trackable_id)
+    else
+      ''
+    end
+  end
 end

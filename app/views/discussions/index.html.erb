@@ -1,8 +1,13 @@
 <%= provide(:title, 'Discussions') %>
 
+<% content_for :feed do %>
+	<%= auto_discovery_link_tag(:rss, :controller => 'feeds', :action => 'discussions') %>
+<% end %>
+
 <div class="row">
 	<div class="span10 offset1">
-		<%= link_to 'New Discussion', new_discussion_path %><br/><br/>
+		<%= link_to 'New Discussion', new_discussion_path %>
+		<span class='rss'><%= link_to 'Subscribe', feeds_discussions_path %></span><br/><br/>
 		<table class="table">
 			<tbody>
 				<%= render partial: 'discussion_summary', collection: @discussions, as: "discussion" %>

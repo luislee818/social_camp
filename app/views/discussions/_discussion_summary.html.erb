@@ -6,7 +6,7 @@
 		<%= link_to discussion.last_update_user.name, discussion.last_update_user %>
 	</td>
 	<td class="discussion-column">
-		<%= link_to (raw "<strong>#{discussion.subject}</strong>"), discussion %> - 
+		<%= link_to (strong discussion.subject), discussion %> - 
 		<%= truncate discussion.last_update_content, length: 60 %>
 		&nbsp;
 		<% if date_is_today discussion.last_update_time  %>

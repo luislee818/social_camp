@@ -26,7 +26,10 @@ SocialCamp::Application.routes.draw do
   # progresses
   match '/progress', to: 'progresses#all'
   
-  
+  # feeds
+  match 'feeds/discussions(.:format)', to: 'feeds#discussions', as: :feeds_discussions, defaults: { format: 'rss' }
+  match 'feeds/events(.:format)', to: 'feeds#events', as: :feeds_events, defaults: { format: 'rss' }
+  match 'feeds/progresses(.:format)', to: 'feeds#progresses', as: :feeds_progresses, defaults: { format: 'rss' }
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
