@@ -10,6 +10,9 @@ gem 'thin'
 
 gem 'simplecov'
 
+gem 'autotest'
+gem 'autotest-rails'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 

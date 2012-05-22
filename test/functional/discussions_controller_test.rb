@@ -97,6 +97,17 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert_select 'title', 'SocialCamp | Discussions'
   end
 
+  test "discussions page shows the same number of discussions as in discussions variable" do
+    user = users(:john)
+    sign_in user
+
+    get :index
+
+    assert_response :success
+    assert_not_nil assigns(:discussions)
+    assert_select 'td.discussion-column', count: assigns(:discussions).size
+  end
+
   # Show discussion-------------------------------------------------
   test "user should login before viewing an discussion" do
     make_sure_user_is_not_signed_in

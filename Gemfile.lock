@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    ZenTest (4.8.0)
     actionmailer (3.2.3)
       actionpack (= 3.2.3)
       mail (~> 2.4.4)
@@ -30,6 +31,10 @@ GEM
       multi_json (~> 1.0)
     annotate (2.4.1.beta1)
     arel (3.0.2)
+    autotest (4.4.6)
+      ZenTest (>= 4.4.1)
+    autotest-rails (4.1.2)
+      ZenTest (~> 4.5)
     bcrypt-ruby (3.0.1)
     bootstrap-sass (2.0.0)
     bootstrap-will_paginate (0.0.5)
@@ -123,6 +128,8 @@ PLATFORMS
 
 DEPENDENCIES
   annotate (~> 2.4.1.beta)
+  autotest
+  autotest-rails
   bcrypt-ruby (~> 3.0.0)
   bootstrap-sass (= 2.0.0)
   bootstrap-will_paginate (= 0.0.5)

@@ -4,6 +4,25 @@ class UsersControllerTest < ActionController::TestCase
   setup do
     @user = users(:john)
   end
+
+  # Index ----------------------------------------------
+
+  test "user should sign in before visiting index page" do
+    make_sure_user_is_not_signed_in
+    get :index
+
+    assert_redirected_to signin_path
+  end
+
+  test "user should be able to view index page after sign in" do
+    sign_in users(:john)
+    get :index
+
+    assert_response :success
+    assert_template 'index'
+  end
+
+  # Sign up----------------------------------------------
   
   test "should get new" do
     get :new
@@ -14,9 +33,7 @@ class UsersControllerTest < ActionController::TestCase
     get :new
     assert_select 'title', 'SocialCamp | Sign up'
   end
-  
-  # Sign up----------------------------------------------
-  
+
   test "user should sign up with valid information" do
     post :create, user: { name: "foo", email: "bar@nltechdev.com", 
                           password: "secret", password_confirmation: "secret" }
