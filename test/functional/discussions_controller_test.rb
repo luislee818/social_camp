@@ -1,8 +1,12 @@
 require 'test_helper'
 
 class DiscussionsControllerTest < ActionController::TestCase
+  
+  # TODO: extract @user to setup, extract create() method?, use model.reload instead of updated_model?
+  
   setup do
-    @discussion = discussions(:one)
+    @discussion_with_comments = discussions(:discussion_with_comments)
+    @discussion_without_comments = discussions(:discussion_without_comments)
   end
 
   # Create discussion-------------------------------------------------
@@ -111,7 +115,7 @@ class DiscussionsControllerTest < ActionController::TestCase
   # Show discussion-------------------------------------------------
   test "user should login before viewing an discussion" do
     make_sure_user_is_not_signed_in
-    discussion = discussions(:one)
+    discussion = @discussion_with_comments
     get :show, id: discussion.id
 
     assert_redirected_to signin_path
@@ -121,7 +125,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one)
+    discussion = @discussion_with_comments
     get :show, id: discussion.id
 
     assert_select 'title', 'SocialCamp | View discussion'
@@ -130,7 +134,7 @@ class DiscussionsControllerTest < ActionController::TestCase
   # Edit discussion-------------------------------------------------
   test "user should login before viewing edit discussion page" do
     make_sure_user_is_not_signed_in
-    discussion = discussions(:one)
+    discussion = @discussion_with_comments
     get :edit, id: discussion.id
 
     assert_redirected_to signin_path
@@ -140,7 +144,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:jane)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     get :edit, id: discussion.id
 
     assert_redirected_to discussions_path
@@ -150,7 +154,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     get :edit, id: discussion.id
 
     assert_select 'title', 'SocialCamp | Edit discussion'
@@ -160,7 +164,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     admin = users(:admin)
     sign_in admin
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     get :edit, id: discussion.id
 
     assert_select 'title', 'SocialCamp | Edit discussion'
@@ -169,7 +173,7 @@ class DiscussionsControllerTest < ActionController::TestCase
   # Update discussion-------------------------------------------------
   test "user should login before update a discussion" do
     make_sure_user_is_not_signed_in
-    discussion = discussions(:one)
+    discussion = @discussion_with_comments
     put :update, id: discussion.id
 
     assert_redirected_to signin_path
@@ -179,7 +183,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:jane)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     put :update, id: discussion.id
 
     assert_redirected_to discussions_path
@@ -189,7 +193,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     updated_subject = "foobar"
     updated_content = "Lorem Ipsum"
     put :update, id: discussion.id, discussion: { subject: updated_subject,
@@ -208,7 +212,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     admin = users(:admin)
     sign_in admin
 
-    discussion = discussions(:two) # discussion created by john
+    discussion = @discussion_with_comments
     updated_subject = "foobar"
     updated_content = "Lorem Ipsum"
     put :update, id: discussion.id, discussion: { subject: updated_subject,
@@ -227,7 +231,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     updated_subject = "foobar"
     updated_content = "Lorem Ipsum"
     put :update, id: discussion.id, discussion: { subject: updated_subject,
@@ -247,7 +251,7 @@ class DiscussionsControllerTest < ActionController::TestCase
   # Destroy discussion-------------------------------------------------
   test "user should login before destroy a discussion" do
     make_sure_user_is_not_signed_in
-    discussion = discussions(:one)
+    discussion = @discussion_with_comments
     delete :destroy, id: discussion.id
 
     assert_redirected_to signin_path
@@ -257,7 +261,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:jane)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     delete :destroy, id: discussion.id
 
     assert_redirected_to discussions_path
@@ -271,7 +275,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     delete :destroy, id: discussion.id
 
     assert_redirected_to discussions_path
@@ -285,7 +289,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     admin = users(:admin)
     sign_in admin
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     delete :destroy, id: discussion.id
 
     assert_redirected_to discussions_path
@@ -299,7 +303,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     final_words = discussion.final_words
     delete :destroy, id: discussion.id
 
@@ -319,7 +323,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
     comments = discussion.comments.dup
 
     delete :destroy, id: discussion.id
@@ -336,7 +340,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
 
     comments = discussion.comments.dup
     delete :destroy, id: discussion.id
@@ -358,7 +362,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     admin = users(:admin)
     sign_in admin
 
-    discussion = discussions(:one) # discussion created by john
+    discussion = @discussion_with_comments
 
     comments = discussion.comments.dup
     

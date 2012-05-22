@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :require_login, only: [:index, :show, :edit, :update]
-  before_filter :require_current_user, only: [:edit, :update]
+  before_filter :require_login, only: [:index, :show, :edit, :update, :destroy]
+  before_filter :require_current_user_or_admin, only: [:edit, :update]
   before_filter :require_admin, only: [:destroy]
   
   def index
@@ -53,10 +53,20 @@ class UsersController < ApplicationController
   end
 
   private
+  
+    def attempt_to_access_own_profile?
+      user = User.find(params[:id])
+      current_user?(user)
+    end
 
     def require_current_user
-      user = User.find(params[:id])
-      redirect_to root_path unless current_user?(user)
+      redirect_to root_path unless attempt_to_access_own_profile?
+    end
+    
+    def require_current_user_or_admin
+      unless attempt_to_access_own_profile? || current_user.admin?
+        redirect_to root_path
+      end
     end
 
 end

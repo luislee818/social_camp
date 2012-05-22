@@ -1,12 +1,12 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
+discussion_with_comments:
   id: 1
   subject: MyString
   content: MyText
   user_id: 1
 
-two:
+discussion_without_comments:
   id: 2
   subject: MyString
   content: MyText

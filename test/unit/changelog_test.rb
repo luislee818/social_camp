@@ -2,9 +2,13 @@ require 'test_helper'
 
 class ChangelogTest < ActiveSupport::TestCase
   ACTION_TYPE_ID_VALID = 1
+  
+  setup do
+    @discussion = discussions(:discussion_with_comments)
+  end
 
   test "changelog should have user_id" do
-  	trackable = discussions(:one)
+  	trackable = @discussion
   	user = users(:john)
   	changelog = trackable.changelogs.build
   	changelog.action_type_id = ACTION_TYPE_ID_VALID
@@ -17,7 +21,7 @@ class ChangelogTest < ActiveSupport::TestCase
   end
 
   test "changelog should have action_type_id" do
-  	trackable = discussions(:one)
+  	trackable = @discussion
   	user = users(:john)
   	changelog = trackable.changelogs.build
   	changelog.user_id = user.id
@@ -30,7 +34,7 @@ class ChangelogTest < ActiveSupport::TestCase
   end
 
   test "changelog should have polymorhpic trackable attributes" do
-  	trackable = discussions(:one)
+  	trackable = @discussion
   	user = users(:john)
 
   	changelog = Changelog.new do |c|

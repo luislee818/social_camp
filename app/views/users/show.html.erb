@@ -2,27 +2,27 @@
 
 
 <div class="row">
-        <div class="span10 offset1">
-          <header>
-            <div class="large-avatar">
-            <figure><%= gravatar_for @user %></figure>
-            </div>
-            <div class="user-info">
-            <h2><%= @user.name %></h2>
-            <%= @user.email %>
+	<div class="span10 offset1" id="user-show">
+		<header>
+			<div class="large-avatar" id="avatar">
+				<figure><%= gravatar_for @user %></figure>
+			</div>
+			<div class="user-info" id="user-info">
+				<h2><%= @user.name %></h2>
+				<%= @user.email %>
 
-          <% if current_user.admin? && !current_user?(@user) %>
-              <%= link_to "delete", @user, method: :delete, confirm: "You sure?" %>
-           <% end %>
-           </div>
-          </header>
-          
-          
-          <hr/>
-          <secton>
-          <%= render partial: 'shared/changelog_full', collection: @changelogs, as: 'changelog', locals: { show_user: false } %>
+				<% if current_user.admin? && !current_user?(@user) %>
+				  <%= link_to "delete", @user, method: :delete, confirm: "You sure?" %>
+				<% end %>
+			</div>
+		</header>
+        
+        <hr/>
 
-          <%= will_paginate @changelogs %>
-        </section>
-        </div>
-      </div>
+        <section>
+	        <%= render partial: 'shared/changelog_full', collection: @changelogs, as: 'changelog', locals: { show_user: false } %>
+
+	        <%= will_paginate @changelogs %>
+      </section>
+	</div>
+</div>

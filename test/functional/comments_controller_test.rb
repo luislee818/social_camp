@@ -1,6 +1,11 @@
 require 'test_helper'
 
 class CommentsControllerTest < ActionController::TestCase
+  
+  setup do
+    @discussion = discussions(:discussion_with_comments)
+    @comment = comments(:first_comment)
+  end
 
   # Create comment-------------------------------------------------
 
@@ -18,10 +23,8 @@ class CommentsControllerTest < ActionController::TestCase
       user = users(:john)
       sign_in user
 
-      discussion = discussions(:one)
-
-      post :create, discussion_id: discussion.id, comment: { }
-      assert_redirected_to discussion
+      post :create, discussion_id: @discussion.id, comment: { }
+      assert_redirected_to @discussion
     end
   end
 
@@ -29,12 +32,10 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one)
-
     comment_content = "Lorem Ipsum"
-    post :create, discussion_id: discussion.id, comment: { content: comment_content }
+    post :create, discussion_id: @discussion.id, comment: { content: comment_content }
 
-    assert_redirected_to discussion
+    assert_redirected_to @discussion
 
     # TODO: how to reload child assoications? discussion.comments.reload doesn't work
     created_comment = Comment.last
@@ -48,10 +49,8 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one)
-
     comment_content = "Lorem Ipsum"
-    post :create, discussion_id: discussion.id, comment: { content: comment_content }
+    post :create, discussion_id: @discussion.id, comment: { content: comment_content }
 
     created_comment = Comment.last
     changelog = Changelog.of_trackable(created_comment).last
@@ -65,15 +64,14 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one)
-    discussion_old_timestamp = discussion.updated_at
+    discussion_old_timestamp = @discussion.updated_at
 
     comment_content = "Lorem Ipsum"
 
-    post :create, discussion_id: discussion.id, comment: { content: comment_content }
+    post :create, discussion_id: @discussion.id, comment: { content: comment_content }
 
     created_comment = Comment.last
-    discussion.reload
+    discussion = Discussion.find @discussion.id
     discussion_new_timestamp = discussion.updated_at
 
     assert discussion_new_timestamp > discussion_old_timestamp
@@ -84,8 +82,7 @@ class CommentsControllerTest < ActionController::TestCase
   test "user should signin before viewing a comment" do
     make_sure_user_is_not_signed_in
     
-    comment = comments(:one)
-    get :show, id: comment.id
+    get :show, id: @comment.id
 
     assert_redirected_to signin_path
   end
@@ -94,17 +91,16 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:jane)
     sign_in user
     
-    comment = comments(:one)
-    get :show, id: comment.id
+    get :show, id: @comment.id
 
-    assert_redirected_to comment.discussion
+    assert_redirected_to @comment.discussion
   end
   
   # Edit comment-------------------------------------------------
   test "user should login before viewing edit comment page" do
     make_sure_user_is_not_signed_in
-    comment = comments(:one)
-    get :edit, id: comment.id
+
+    get :edit, id: @comment.id
 
     assert_redirected_to signin_path
   end
@@ -113,18 +109,16 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:jane)
     sign_in user
 
-    comment = comments(:one) # comment created by John
-    get :edit, id: comment.id
+    get :edit, id: @comment.id
 
-    assert_redirected_to comment.discussion
+    assert_redirected_to @comment.discussion
   end
 
   test "user can view edit page of an comment created by herself" do
     user = users(:john)
     sign_in user
 
-    comment = comments(:one) # comment created by John
-    get :edit, id: comment.id
+    get :edit, id: @comment.id
 
     assert_select 'title', 'SocialCamp | Edit comment'
   end
@@ -133,8 +127,7 @@ class CommentsControllerTest < ActionController::TestCase
     admin = users(:admin)
     sign_in admin
 
-    comment = comments(:one) # comment created by John
-    get :edit, id: comment.id
+    get :edit, id: @comment.id
 
     assert_select 'title', 'SocialCamp | Edit comment'
   end
@@ -142,8 +135,8 @@ class CommentsControllerTest < ActionController::TestCase
   # Update comment-------------------------------------------------
   test "user should login before update a comment" do
     make_sure_user_is_not_signed_in
-    comment = comments(:one)
-    put :update, id: comment.id
+
+    put :update, id: @comment.id
 
     assert_redirected_to signin_path
   end
@@ -152,8 +145,7 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:jane)
     sign_in user
 
-    comment = comments(:one) # comment created by John
-    put :update, id: comment.id
+    put :update, id: @comment.id
 
     assert_redirected_to discussions_path
   end
@@ -162,13 +154,12 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    comment = comments(:one) # comment created by John
     updated_content = "Lorem Ipsum"
-    put :update, id: comment.id, comment: { content: updated_content }
+    put :update, id: @comment.id, comment: { content: updated_content }
 
-    assert_redirected_to comment.discussion
+    assert_redirected_to @comment.discussion
 
-    updated_comment = Comment.find comment.id
+    updated_comment = Comment.find @comment.id
 
     assert_equal updated_content, updated_comment.content
     assert_equal user.id, updated_comment.user_id
@@ -178,13 +169,12 @@ class CommentsControllerTest < ActionController::TestCase
     admin = users(:admin)
     sign_in admin
 
-    comment = comments(:one) # comment created by John
     updated_content = "Lorem Ipsum"
-    put :update, id: comment.id, comment: { content: updated_content }
+    put :update, id: @comment.id, comment: { content: updated_content }
 
-    assert_redirected_to comment.discussion
+    assert_redirected_to @comment.discussion
 
-    updated_comment = Comment.find comment.id
+    updated_comment = Comment.find @comment.id
 
     assert_equal updated_content, updated_comment.content
     assert_not_equal admin.id, updated_comment.user_id
@@ -194,13 +184,12 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    comment = comments(:one) # comment created by John
     updated_content = "Lorem Ipsum"
-    put :update, id: comment.id, comment: { content: updated_content }
+    put :update, id: @comment.id, comment: { content: updated_content }
 
-    assert_redirected_to comment.discussion
+    assert_redirected_to @comment.discussion
 
-    updated_comment = Comment.find comment.id
+    updated_comment = Comment.find @comment.id
     changelog = Changelog.of_trackable(updated_comment).last
 
     assert_equal updated_comment, changelog.trackable
@@ -212,14 +201,12 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one)
-    discussion_old_timestamp = discussion.updated_at
+    discussion_old_timestamp = @discussion.updated_at
 
-    comment = comments(:one) # comment created by John
     updated_content = "Lorem Ipsum"
-    put :update, id: comment.id, comment: { content: updated_content }
+    put :update, id: @comment.id, comment: { content: updated_content }
 
-    discussion.reload
+    discussion = Discussion.find @discussion.id
     discussion_new_timestamp = discussion.updated_at
 
     assert discussion_new_timestamp > discussion_old_timestamp
@@ -228,8 +215,8 @@ class CommentsControllerTest < ActionController::TestCase
   # Destroy comment-------------------------------------------------
   test "user should login before destroy a comment" do
     make_sure_user_is_not_signed_in
-    comment = comments(:one)
-    delete :destroy, id: comment.id
+
+    delete :destroy, id: @comment.id
 
     assert_redirected_to signin_path
   end
@@ -238,12 +225,11 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:jane)
     sign_in user
 
-    comment = comments(:one) # comment created by john
-    delete :destroy, id: comment.id
+    delete :destroy, id: @comment.id
 
     assert_redirected_to discussions_path
 
-    comment_attempted_to_destroy = Comment.find comment.id
+    comment_attempted_to_destroy = Comment.find @comment.id
 
     refute comment_attempted_to_destroy.nil?
   end
@@ -252,12 +238,11 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    comment = comments(:one) # comment created by john
-    delete :destroy, id: comment.id
+    delete :destroy, id: @comment.id
 
-    assert_redirected_to comment.discussion
+    assert_redirected_to @comment.discussion
 
-    comment_attempted_to_destroy = Comment.find_by_id comment.id
+    comment_attempted_to_destroy = Comment.find_by_id @comment.id
 
     assert comment_attempted_to_destroy.nil?
   end
@@ -266,12 +251,11 @@ class CommentsControllerTest < ActionController::TestCase
     admin = users(:admin)
     sign_in admin
 
-    comment = comments(:one) # comment created by john
-    delete :destroy, id: comment.id
+    delete :destroy, id: @comment.id
 
-    assert_redirected_to comment.discussion
+    assert_redirected_to @comment.discussion
 
-    comment_attempted_to_destroy = Comment.find_by_id comment.id
+    comment_attempted_to_destroy = Comment.find_by_id @comment.id
 
     assert comment_attempted_to_destroy.nil?
   end
@@ -280,13 +264,12 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    comment = comments(:one) # comment created by john
-    final_words = comment.final_words
-    delete :destroy, id: comment.id
+    final_words = @comment.final_words
+    delete :destroy, id: @comment.id
 
-    comment_attempted_to_destroy = Comment.find_by_id comment.id
+    comment_attempted_to_destroy = Comment.find_by_id @comment.id
 
-    changelog = Changelog.of_trackable(comment).last
+    changelog = Changelog.of_trackable(@comment).last
 
     assert comment_attempted_to_destroy.nil?
     assert_equal final_words, changelog.destroyed_content_summary
@@ -298,13 +281,12 @@ class CommentsControllerTest < ActionController::TestCase
     admin = users(:admin)
     sign_in admin
 
-    comment = comments(:one) # comment created by john
-    final_words = comment.final_words
-    delete :destroy, id: comment.id
+    final_words = @comment.final_words
+    delete :destroy, id: @comment.id
 
-    comment_attempted_to_destroy = Comment.find_by_id comment.id
+    comment_attempted_to_destroy = Comment.find_by_id @comment.id
 
-    changelog = Changelog.of_trackable(comment).last
+    changelog = Changelog.of_trackable(@comment).last
 
     assert comment_attempted_to_destroy.nil?
     assert_equal final_words, changelog.destroyed_content_summary
@@ -316,13 +298,11 @@ class CommentsControllerTest < ActionController::TestCase
     user = users(:john)
     sign_in user
 
-    discussion = discussions(:one)
-    discussion_old_timestamp = discussion.updated_at
+    discussion_old_timestamp = @discussion.updated_at
 
-    comment = comments(:one) # comment created by John
-    delete :destroy, id: comment.id
+    delete :destroy, id: @comment.id
 
-    discussion.reload
+    discussion = Discussion.find @discussion.id
     discussion_new_timestamp = discussion.updated_at
 
     assert discussion_new_timestamp > discussion_old_timestamp

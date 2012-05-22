@@ -2,26 +2,26 @@
 <h1>Update your profile</h1>
 
 <div class="row">
-  <div class="span6 offset3">
-  <%= form_for @user, :html => { :class => "well" } do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
+  <div class="span6 offset3" id="user-edit">
+	  <%= form_for @user, :html => { :class => "well" } do |f| %>
+	      <%= render 'shared/error_messages', object: f.object %>
 
-      <%= f.label :name, class: 'required' %>
-      <%= f.text_field :name %>
+	      <%= f.label :name, class: 'required' %>
+	      <%= f.text_field :name %>
 
-      <%= f.label :email, class: 'required' %>
-      <%= f.text_field :email %>
+	      <%= f.label :email, class: 'required' %>
+	      <%= f.text_field :email %>
 
-      <%= f.label :password, class: 'required' %>
-      <%= f.password_field :password %>
+	      <%= f.label :password, class: 'required' %>
+	      <%= f.password_field :password %>
 
-      <%= f.label :password_confirmation, "Confirm Password", class: 'required' %>
-      <%= f.password_field :password_confirmation %>
+	      <%= f.label :password_confirmation, "Confirm Password", class: 'required' %>
+	      <%= f.password_field :password_confirmation %>
 
-      <%= f.submit "Save changes", class: "btn btn-large btn-primary" %>
-    <% end %>
+	      <%= f.submit "Save changes", class: "btn btn-large btn-primary" %>
+	    <% end %>
 
-    <%= gravatar_for @user %>
-    <a href="http://gravatar.com/emails">change</a>
+	    <%= gravatar_for @user %>
+	    <a href="http://gravatar.com/emails">change</a>
   </div>
 </div>

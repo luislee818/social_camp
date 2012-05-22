@@ -22,11 +22,8 @@ class UserTest < ActiveSupport::TestCase
   PASSWORD_VALID = "1234Abcd"
   PASSWORD_TOO_SHORT = "a" * 5
 
-
   test "user should have a name" do
-  	user = User.new(email: EMAIL_VALID,
-  					password: PASSWORD_VALID,
-  					password_confirmation: PASSWORD_VALID)
+  	user = create(name: nil)
 
   	assert user.invalid?
 
@@ -36,10 +33,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user name should be at most 20 characters" do
-  	user = User.new(name: NAME_TOO_LONG, 
-  					email: EMAIL_VALID,
-  					password: PASSWORD_VALID,
-  					password_confirmation: PASSWORD_VALID)
+  	user = create(name: NAME_TOO_LONG)
 
   	assert user.invalid?
 
@@ -49,9 +43,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user should have an email" do
-  	user = User.new(name: NAME_VALID,
-  					password: PASSWORD_VALID,
-  					password_confirmation: PASSWORD_VALID)
+  	user = create(email: nil)
 
   	assert user.invalid?
 
@@ -67,9 +59,7 @@ class UserTest < ActiveSupport::TestCase
   	invalid_emails = %w[user@foo.com A_USER@f.b.org frst.lst@foo.jp a+b@baz.cn]
   	valid_emails = %w[abc@nltechdev.com foo@nltechdev.com dpli@NLTechDev.com]
 
-  	user = User.new(name: NAME_VALID,
-  					password: PASSWORD_VALID,
-  					password_confirmation: PASSWORD_VALID)
+  	user = create(email: nil)
 
   	invalid_emails.each do |invalid_email|
   		user.email = invalid_email
@@ -83,10 +73,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user name should be unique" do
-    user = User.new(name: NAME_VALID, 
-            email: EMAIL_VALID,
-            password: PASSWORD_VALID,
-            password_confirmation: PASSWORD_VALID)
+    user = create()
 
     user_with_same_name = user.dup
     user_with_same_name.email = "foo#{user.email}"
@@ -97,10 +84,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user name should be unique, name of same case should be invalid" do
-    user = User.new(name: NAME_VALID, 
-            email: EMAIL_VALID,
-            password: PASSWORD_VALID,
-            password_confirmation: PASSWORD_VALID)
+    user = create()
 
     user_with_same_name = user.dup
     user_with_same_name.email = "foo#{user.email}"
@@ -111,10 +95,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user name should be unique, name of different case should be valid" do
-    user = User.new(name: NAME_VALID, 
-            email: EMAIL_VALID,
-            password: PASSWORD_VALID,
-            password_confirmation: PASSWORD_VALID)
+    user = create()
 
     user_with_same_name = user.dup
     user_with_same_name.email = "foo#{user.email}"
@@ -126,11 +107,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user email should be unique" do
-  	user = User.new(name: NAME_VALID, 
-  					email: EMAIL_VALID,
-  					password: PASSWORD_VALID,
-  					password_confirmation: PASSWORD_VALID)
-
+  	user = create()
+  	
   	user_with_same_email = user.dup
     user_with_same_email.name = "foo #{user.name}"
 
@@ -140,10 +118,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user email should be unique, email should be case insensitive" do
-  	user = User.new(name: NAME_VALID, 
-  					email: EMAIL_VALID,
-  					password: PASSWORD_VALID,
-  					password_confirmation: PASSWORD_VALID)
+  	user = create()
 
   	user_with_same_email = user.dup
     user_with_same_email.name = "foo #{user.name}"
@@ -155,35 +130,24 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "password should be present" do
-  	user = User.new(name: NAME_VALID, 
-  					email: EMAIL_VALID,
-  					password_confirmation: PASSWORD_VALID)
+  	user = create(password: nil)
 
   	assert user.invalid?
   end
 
   test "password should be long enough" do
-  	user = User.new(name: NAME_VALID, 
-  					email: EMAIL_VALID,
-  					password: PASSWORD_TOO_SHORT,
-  					password_confirmation: PASSWORD_TOO_SHORT)
-
+  	user = create(password: PASSWORD_TOO_SHORT, password_confirmation: PASSWORD_TOO_SHORT)
   	assert user.invalid?
   end
 
   test "password_confirmation should be present" do
-  	user = User.new(name: NAME_VALID, 
-  					email: EMAIL_VALID,
-  					password: PASSWORD_VALID)
-
+  	user = create(password_confirmation: nil)
+  	
   	assert user.invalid?
   end
 
   test "password and password_confirmation should match" do
-  	user = User.new(name: NAME_VALID, 
-  					email: EMAIL_VALID,
-  					password: PASSWORD_VALID,
-  					password_confirmation: PASSWORD_VALID.reverse)
+  	user = create(password_confirmation: PASSWORD_VALID.reverse)
 
   	assert user.invalid?
   end
@@ -212,5 +176,15 @@ class UserTest < ActiveSupport::TestCase
   	assert user.respond_to? :password_confirmation
   	assert user.respond_to? :authenticate
   end
+  
+  private
+    def create(options = {})
+      User.new({
+        name: NAME_VALID,
+        email: EMAIL_VALID,
+        password: PASSWORD_VALID,
+        password_confirmation: PASSWORD_VALID
+      }.merge(options))
+    end
 
 end

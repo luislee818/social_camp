@@ -5,6 +5,8 @@ module AuthenticationHelper
   end
 
   def require_admin
-    redirect_to root_path unless current_user.admin?
+    unless signed_in? && current_user.admin?
+      redirect_to root_path 
+    end
   end
 end

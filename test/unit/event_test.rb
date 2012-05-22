@@ -4,10 +4,18 @@ class EventTest < ActiveSupport::TestCase
   NAME_VALID = "Test Event"
   NAME_TOO_LONG = "a" * 101
   START_AT_VALID = "2012/12/21 17:00"
+  
+  DEFAULT_OPTIONS = {
+    name: NAME_VALID,
+    start_at: START_AT_VALID
+  }
+  
+  setup do
+    @john = users(:john)
+  end
 
   test "event should have name" do
-    user = users(:john)
-  	event = user.events.build(start_at: START_AT_VALID)
+  	event = build_event_for_user(@john, name: nil)
 
   	assert event.invalid?
 
@@ -17,17 +25,14 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "event name should not be more than 100 characters" do
-    user = users(:john)
-    event = user.events.build(start_at: START_AT_VALID,
-                              name: NAME_TOO_LONG)
+    event = build_event_for_user(@john, name: NAME_TOO_LONG)
 
     assert event.invalid?
   end
 
   test "event should have start_at date" do
-  	user = users(:john)
-    event = user.events.build(name: NAME_VALID)
-
+    event = build_event_for_user(@john, start_at: nil)
+    
   	assert event.invalid?
 
   	event.start_at = START_AT_VALID
@@ -36,8 +41,24 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "event should have user_id" do
-    event = Event.new(start_at: START_AT_VALID, name: NAME_VALID)
+    event = create()
 
     assert event.invalid?
   end
+  
+  test "display title should be the same as event name" do
+    event = create()
+    
+    assert_equal NAME_VALID, event.display_title
+  end
+  
+  private
+  
+    def build_event_for_user(user, options = {})
+      user.events.build(DEFAULT_OPTIONS.merge(options))
+    end
+    
+    def create(options = {})
+      Event.new(DEFAULT_OPTIONS.merge(options))
+    end
 end
