@@ -1,9 +1,9 @@
 <%= provide(:title, 'View discussion') %>
 
 <div class="row">
-	<div class="span8 offset2">
+	<div class="span8 offset2" id="discussion-show">
 		<h2><%= @discussion.subject %></h2>
-		<div class="discussion-container">
+		<div class="discussion-container" id="discussion">
 			<div class="avatar">
 				<%= gravatar_for @discussion.user %><br/>
 				<%= link_to @discussion.user.name, @discussion.user %>
@@ -26,21 +26,21 @@
 		</div>
 		<hr/>
 
-		<div class="comments">
+		<div class="comments" id="comments">
 			<%= render partial: @comments, spacer_template: "comments/comment_ruler" %>
 		</div>
 
-		<div class="new-comment">
+		<div class="new-comment" id="comment-new">
 			<%= render 'comments/form' %>
 		</div>
 
 		<%= will_paginate @comments %>
 
-		<div class="links">
-			<%= link_to 'All Discussions', discussions_path %>
+		<div class="links" id="links-discussions">
+			<%= link_to 'All Discussions', discussions_path, id: 'discussions-link' %>
 		    <% if current_user == @discussion.user || current_user.admin? %>
-		       | <%= link_to 'Edit', edit_discussion_path(@discussion) %>
-		       | <%= link_to 'Delete', @discussion, confirm: 'Are you sure?', method: :delete %>
+		       | <%= link_to 'Edit', edit_discussion_path(@discussion), id: 'discussion-edit-link' %>
+		       | <%= link_to 'Delete', @discussion, confirm: 'Are you sure?', method: :delete, id: 'discussion-delete-link' %>
 		    <% end %>
 		</div>
 	</div>

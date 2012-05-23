@@ -4,7 +4,7 @@ xml.rss "version" => "2.0",
   xml.channel do
     xml.title 'SocialCamp - Events Updates'
     xml.link events_url
-    xml.pubDate CGI.rfc1123_date(@event_updates.first.updated_at)
+    xml.pubDate CGI.rfc1123_date(@event_updates.first ? @event_updates.first.updated_at : Time.now)
     xml.description h("Latest 20 event updates on SocialCamp")
     @event_updates.each do |event_update|
       xml.item do

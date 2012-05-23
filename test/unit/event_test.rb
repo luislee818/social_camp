@@ -14,6 +14,8 @@ class EventTest < ActiveSupport::TestCase
     @john = users(:john)
   end
 
+  # validations
+
   test "event should have name" do
   	event = build_event_for_user(@john, name: nil)
 
@@ -45,8 +47,10 @@ class EventTest < ActiveSupport::TestCase
 
     assert event.invalid?
   end
+
+  # display_title
   
-  test "display title should be the same as event name" do
+  test "display_title should be the same as event name" do
     event = create()
     
     assert_equal NAME_VALID, event.display_title

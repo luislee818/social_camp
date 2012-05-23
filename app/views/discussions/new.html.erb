@@ -2,8 +2,8 @@
 <h1>Create new discussion</h1>
 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="span6 offset3" id="discussion-new">
 	<%= render 'form' %>
-	<%= link_to 'All discussions', discussions_path %>
+	<%= link_to 'All discussions', discussions_path, id: 'discussions-link' %>
   </div>
 </div>

@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 first_comment:
-  discussion_id: 1
+  discussion: discussion_with_comments
   content: First comment
-  user_id: 1
+  user: john
 
 second_comment:
-  discussion_id: 1
+  discussion: discussion_with_comments
   content: Second comment
-  user_id: 1
+  user: jane

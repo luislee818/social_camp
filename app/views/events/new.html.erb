@@ -2,8 +2,8 @@
 <h1>Create new event</h1>
 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="span6 offset3" id="event-new">
 	<%= render 'form' %>
-	<%= link_to 'All Events', events_path %>
+	<%= link_to 'All Events', events_path, id: 'events-link' %>
   </div>
 </div>

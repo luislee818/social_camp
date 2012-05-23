@@ -2,9 +2,9 @@
 <h1>Edit event</h1>
 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="span6 offset3" id="event-edit">
 	<%= render 'form' %>
-	<%= link_to 'All Events', events_path %>
-	| <%= link_to 'Delete', @event, confirm: 'Are you sure?', method: :delete %>
+	<%= link_to 'All Events', events_path, id: 'events-link' %>
+	| <%= link_to 'Delete', @event, confirm: 'Are you sure?', method: :delete, id: 'event-delete-link' %>
   </div>
 </div>

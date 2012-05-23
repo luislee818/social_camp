@@ -5,11 +5,14 @@
 <% end %>
 
 <div class="row">
-	<div class="span10 offset1">
-		<span class='rss'><%= link_to 'Subscribe', feeds_progresses_path %></span>
+	<div class="span10 offset1" id="progresses">
+		<span class="rss" id="rss"><%= link_to 'Subscribe', feeds_progresses_path %></span>
 		<h2>What's been happening...</h2>
 		<hr/>
-		<%= render partial: 'shared/changelog_full', collection: @changelogs, as: 'changelog', locals: { show_user: true } %>
+
+		<div id="changelogs">
+			<%= render partial: 'shared/changelog_full', collection: @changelogs, as: 'changelog', locals: { show_user: true } %>
+		</div>
 
 		<%= will_paginate @changelogs %>
 	</div>

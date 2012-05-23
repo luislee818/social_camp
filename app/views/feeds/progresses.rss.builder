@@ -4,7 +4,7 @@ xml.rss "version" => "2.0",
   xml.channel do
     xml.title 'SocialCamp - All Updates'
     xml.link progress_url
-    xml.pubDate CGI.rfc1123_date(@changelogs.first.updated_at)
+    xml.pubDate CGI.rfc1123_date(@changelogs.first ? @changelogs.first.updated_at : Time.now)
     xml.description h("Latest 20 event updates on SocialCamp")
     @changelogs.each do |changelog|
       xml.item do

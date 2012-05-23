@@ -5,12 +5,12 @@
 <% end %>
 
 <div class="row">
-	<div class="span10 offset1">
-		<%= link_to 'New Event', new_event_path %>
-		<span class='rss'><%= link_to 'Subscribe', feeds_events_path %></span>
+	<div class="span10 offset1" id="events">
+		<%= link_to 'New Event', new_event_path, id: 'event-new-link' %>
+		<span class="rss" id="rss"><%= link_to 'Subscribe', feeds_events_path %></span>
 
 		<% unless @upcoming_events.empty? %>
-			<div class="events-container">
+			<div class="events-container" id="upcoming-events">
 				<h2>Upcoming Events</h2>
 				<hr/>
 				<%= render partial: 'event_summary', collection: @upcoming_events, as: "event" %>
@@ -18,7 +18,7 @@
 		<% end %>
 
 		<% unless @past_events.empty? %>
-			<div class="events-container">
+			<div class="events-container" id="past-events">
 				<h2>Past Events</h2>
 				<hr/>
 				<%= render partial: 'event_summary', collection: @past_events, as: "event" %>

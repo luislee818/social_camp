@@ -2,8 +2,8 @@
 <h1>Edit comment</h1>
 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="span6 offset3" id="comment-edit">
 	<%= render 'form' %>
-	<%= link_to 'Back to discussion', @comment.discussion %>
+	<%= link_to 'Back to discussion', @comment.discussion, id: 'discussion-view-link' %>
   </div>
 </div>

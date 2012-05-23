@@ -12,20 +12,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 john:
-  id: 1
   name: John
   email: john@nltechdev.com
   password_digest:  <%=BCrypt::Password.create('1234Abcd') %>
 
 
 jane:
-  id: 2
   name: Jane
   email: jane@nltechdev.com
   password_digest:  <%=BCrypt::Password.create('1234Abcd') %>
-  
+
 admin:
-  id: 3
   name: Admin
   email: admin@nltechdev.com
   password_digest:  <%=BCrypt::Password.create('1234Abcd') %>

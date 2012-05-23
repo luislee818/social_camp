@@ -12,10 +12,13 @@ class DiscussionTest < ActiveSupport::TestCase
   
   setup do
     @john = users(:john)
+    @jane = users(:jane)
     @discussion_with_comments = discussions(:discussion_with_comments)
     @last_comment = comments(:second_comment)
     @discussion_without_comments = discussions(:discussion_without_comments)
   end
+
+  # Validations
 
   test "discussion should have subject" do
   	discussion = build_discussion_for_user(@john, subject: nil)
@@ -40,12 +43,16 @@ class DiscussionTest < ActiveSupport::TestCase
 
     assert discussion.invalid?
   end
+
+  # display_title
   
   test "display_title should be the same as discussion subject" do
     discussion = create()
     
     assert_equal SUBJECT_VALID, discussion.display_title
   end
+
+  # last_update_content
   
   test "last_update_content of a discussion without comments should be the same as the content of discussion" do
     assert_equal @discussion_without_comments.content, @discussion_without_comments.last_update_content
@@ -54,8 +61,36 @@ class DiscussionTest < ActiveSupport::TestCase
   test "last_update_content of a discussion with comments should be the same as the content of last comment" do
     assert_equal @last_comment.content, @discussion_with_comments.last_update_content
   end
-  
-  # TODO: Add tests for last_update_user, last_update_time and touch
+
+  # last_update_user
+  test "last_update_user for a discussion without comments should be the same as user created the discussion" do
+    assert_equal @jane, @discussion_without_comments.last_update_user
+  end
+
+  test "last_update_user for a discussion with comments should be the same as user created the last comment" do
+    assert_equal @jane, @discussion_with_comments.last_update_user
+  end
+
+  # last_update_time
+
+  test "last_update_time for a discussion without comments should be the same as the last update time of discussion" do
+    assert_equal @discussion_without_comments.updated_at, @discussion_without_comments.last_update_time
+  end
+
+  test "last_update_time for a discussion with comments should be the same as the last update time of the last comment" do
+    assert_equal @last_comment.updated_at, @discussion_with_comments.last_update_time
+  end
+
+  # touch
+
+  test "calling touch will change the updated_at attribute of discussion" do
+    old_timestamp = @discussion_with_comments.updated_at
+    @discussion_with_comments.touch
+
+    discussion = Discussion.find @discussion_with_comments.id
+
+    assert_not_equal old_timestamp, discussion.updated_at
+  end
   
   private
   

@@ -1,8 +1,16 @@
 require 'test_helper'
 
 class CommentsControllerTest < ActionController::TestCase
+  CONTENT_VALID = 'Lorem Ipsum'
+
+  DEFAULT_OPTIONS = {
+    content: CONTENT_VALID
+  }
   
   setup do
+    @john = users(:john)
+    @jane = users(:jane)
+    @admin = users(:admin)
     @discussion = discussions(:discussion_with_comments)
     @comment = comments(:first_comment)
   end
@@ -12,16 +20,14 @@ class CommentsControllerTest < ActionController::TestCase
   test "user should signin before creating comment" do
     make_sure_user_is_not_signed_in
     
-    comment_content = "Lorem Ipsum"
-    post :create, comment: { content: comment_content }
+    post :create, comment: DEFAULT_OPTIONS
     
     assert_redirected_to signin_path
   end
 
   test "comment should not be created when content is not provided" do
     assert_no_difference 'Comment.count' do
-      user = users(:john)
-      sign_in user
+      sign_in @john
 
       post :create, discussion_id: @discussion.id, comment: { }
       assert_redirected_to @discussion
@@ -29,11 +35,9 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "comment should be created when valid info (content) is provided" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
-    comment_content = "Lorem Ipsum"
-    post :create, discussion_id: @discussion.id, comment: { content: comment_content }
+    post :create, discussion_id: @discussion.id, comment: DEFAULT_OPTIONS
 
     assert_redirected_to @discussion
 
@@ -41,34 +45,29 @@ class CommentsControllerTest < ActionController::TestCase
     created_comment = Comment.last
 
     refute created_comment.nil?
-    assert_equal comment_content, created_comment.content
-    assert_equal user, created_comment.user
+    assert_equal DEFAULT_OPTIONS[:content], created_comment.content
+    assert_equal @john, created_comment.user
   end
 
   test "upon successful comment creation there should be a changelog" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
-    comment_content = "Lorem Ipsum"
-    post :create, discussion_id: @discussion.id, comment: { content: comment_content }
+    post :create, discussion_id: @discussion.id, comment: DEFAULT_OPTIONS
 
     created_comment = Comment.last
     changelog = Changelog.of_trackable(created_comment).last
 
     assert_equal created_comment, changelog.trackable
     assert_equal ActionType::ADD, changelog.action_type_id
-    assert_equal user.id, changelog.user_id
+    assert_equal @john.id, changelog.user_id
   end
 
   test "upon successful comment creation updated_at of discussion should be updated" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
     discussion_old_timestamp = @discussion.updated_at
 
-    comment_content = "Lorem Ipsum"
-
-    post :create, discussion_id: @discussion.id, comment: { content: comment_content }
+    post :create, discussion_id: @discussion.id, comment: DEFAULT_OPTIONS
 
     created_comment = Comment.last
     discussion = Discussion.find @discussion.id
@@ -88,8 +87,7 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "user should be redirected to discussion when viewing a comment" do
-    user = users(:jane)
-    sign_in user
+    sign_in @john
     
     get :show, id: @comment.id
 
@@ -97,7 +95,8 @@ class CommentsControllerTest < ActionController::TestCase
   end
   
   # Edit comment-------------------------------------------------
-  test "user should login before viewing edit comment page" do
+
+  test "user should sign in before viewing edit comment page" do
     make_sure_user_is_not_signed_in
 
     get :edit, id: @comment.id
@@ -106,8 +105,7 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "user cannot view edit page of an comment created by others" do
-    user = users(:jane)
-    sign_in user
+    sign_in @jane
 
     get :edit, id: @comment.id
 
@@ -115,25 +113,28 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "user can view edit page of an comment created by herself" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
     get :edit, id: @comment.id
 
     assert_select 'title', 'SocialCamp | Edit comment'
+    assert_select 'div#comment-edit', count: 1
+    assert_select 'a#discussion-view-link', count: 1
   end
 
   test "admin can view edit page of an discussion created by others" do
-    admin = users(:admin)
-    sign_in admin
+    sign_in @admin
 
     get :edit, id: @comment.id
 
     assert_select 'title', 'SocialCamp | Edit comment'
+    assert_select 'div#comment-edit', count: 1
+    assert_select 'a#discussion-view-link', count: 1
   end
   
   # Update comment-------------------------------------------------
-  test "user should login before update a comment" do
+
+  test "user should sign in before update a comment" do
     make_sure_user_is_not_signed_in
 
     put :update, id: @comment.id
@@ -142,8 +143,7 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "user cannot update a comment created by others" do
-    user = users(:jane)
-    sign_in user
+    sign_in @jane
 
     put :update, id: @comment.id
 
@@ -151,10 +151,9 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "user can update an discussion created by herself" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
-    updated_content = "Lorem Ipsum"
+    updated_content = "More Lorem Ipsum"
     put :update, id: @comment.id, comment: { content: updated_content }
 
     assert_redirected_to @comment.discussion
@@ -162,14 +161,13 @@ class CommentsControllerTest < ActionController::TestCase
     updated_comment = Comment.find @comment.id
 
     assert_equal updated_content, updated_comment.content
-    assert_equal user.id, updated_comment.user_id
+    assert_equal @john.id, updated_comment.user_id
   end
 
   test "admin can update a comment created by another user" do
-    admin = users(:admin)
-    sign_in admin
+    sign_in @admin
 
-    updated_content = "Lorem Ipsum"
+    updated_content = "More Lorem Ipsum"
     put :update, id: @comment.id, comment: { content: updated_content }
 
     assert_redirected_to @comment.discussion
@@ -177,14 +175,13 @@ class CommentsControllerTest < ActionController::TestCase
     updated_comment = Comment.find @comment.id
 
     assert_equal updated_content, updated_comment.content
-    assert_not_equal admin.id, updated_comment.user_id
+    assert_not_equal @admin.id, updated_comment.user_id
   end
 
   test "upon successful comment update there should be a changelog" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
-    updated_content = "Lorem Ipsum"
+    updated_content = "More Lorem Ipsum"
     put :update, id: @comment.id, comment: { content: updated_content }
 
     assert_redirected_to @comment.discussion
@@ -194,16 +191,15 @@ class CommentsControllerTest < ActionController::TestCase
 
     assert_equal updated_comment, changelog.trackable
     assert_equal ActionType::UPDATE, changelog.action_type_id
-    assert_equal user.id, changelog.user_id
+    assert_equal @john.id, changelog.user_id
   end
 
   test "upon successful comment update updated_at of discussion should be updated" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
     discussion_old_timestamp = @discussion.updated_at
 
-    updated_content = "Lorem Ipsum"
+    updated_content = "More Lorem Ipsum"
     put :update, id: @comment.id, comment: { content: updated_content }
 
     discussion = Discussion.find @discussion.id
@@ -213,7 +209,8 @@ class CommentsControllerTest < ActionController::TestCase
   end
   
   # Destroy comment-------------------------------------------------
-  test "user should login before destroy a comment" do
+
+  test "user should sign in before destroying a comment" do
     make_sure_user_is_not_signed_in
 
     delete :destroy, id: @comment.id
@@ -222,8 +219,7 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "user cannot destroy a discussion created by others" do
-    user = users(:jane)
-    sign_in user
+    sign_in @jane
 
     delete :destroy, id: @comment.id
 
@@ -235,8 +231,7 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "user can destroy a comment created by herself" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
     delete :destroy, id: @comment.id
 
@@ -248,8 +243,7 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "admin can destroy a comment created by another user" do
-    admin = users(:admin)
-    sign_in admin
+    sign_in @admin
 
     delete :destroy, id: @comment.id
 
@@ -261,8 +255,7 @@ class CommentsControllerTest < ActionController::TestCase
   end
 
   test "upon successful comment destroy there should be a changelog" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
     final_words = @comment.final_words
     delete :destroy, id: @comment.id
@@ -274,12 +267,11 @@ class CommentsControllerTest < ActionController::TestCase
     assert comment_attempted_to_destroy.nil?
     assert_equal final_words, changelog.destroyed_content_summary
     assert_equal ActionType::DESTROY, changelog.action_type_id
-    assert_equal user.id, changelog.user_id
+    assert_equal @john.id, changelog.user_id
   end
 
   test "upon successful comment destroy by admin there should be a changelog" do
-    admin = users(:admin)
-    sign_in admin
+    sign_in @admin
 
     final_words = @comment.final_words
     delete :destroy, id: @comment.id
@@ -291,12 +283,11 @@ class CommentsControllerTest < ActionController::TestCase
     assert comment_attempted_to_destroy.nil?
     assert_equal final_words, changelog.destroyed_content_summary
     assert_equal ActionType::DESTROY, changelog.action_type_id
-    assert_equal admin.id, changelog.user_id
+    assert_equal @admin.id, changelog.user_id
   end
 
   test "upon successful comment destroy updated_at of discussion should be updated" do
-    user = users(:john)
-    sign_in user
+    sign_in @john
 
     discussion_old_timestamp = @discussion.updated_at
 

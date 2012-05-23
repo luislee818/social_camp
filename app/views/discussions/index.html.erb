@@ -5,9 +5,9 @@
 <% end %>
 
 <div class="row">
-	<div class="span10 offset1">
-		<%= link_to 'New Discussion', new_discussion_path %>
-		<span class='rss'><%= link_to 'Subscribe', feeds_discussions_path %></span><br/><br/>
+	<div class="span10 offset1" id="discussions">
+		<%= link_to 'New Discussion', new_discussion_path, id: 'discussion-new-link' %>
+		<span class="rss" id="rss"><%= link_to 'Subscribe', feeds_discussions_path %></span><br/><br/>
 		<table class="table">
 			<tbody>
 				<%= render partial: 'discussion_summary', collection: @discussions, as: "discussion" %>

@@ -1,7 +1,7 @@
 <%= provide(:title, 'Dashboard') %>
 
 <div class="row">
-	<div class="span9">
+	<div class="span9" id="discussions">
 		<h3>Discussions</h3>
 		<table class="table">
 			<tbody>
@@ -9,10 +9,10 @@
 			</tbody>
 		</table>
 		<hr/>
-		<%= link_to "All Discussions", discussions_path %>
+		<%= link_to "All Discussions", discussions_path, id: 'discussions-link' %>
 	</div>
 
-	<div class="span3">
+	<div class="span3" id="upcoming_events">
 		<h3>Upcoming Events</h3>
 		<table class="table">
 			<tbody>
@@ -20,6 +20,6 @@
 			</tbody>
 		</table>
 		<hr/>
-		<%= link_to "All Events", events_path %>
+		<%= link_to "All Events", events_path, id: 'events-link' %>
 	</div>
 </div>

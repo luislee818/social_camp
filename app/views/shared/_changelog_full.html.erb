@@ -1,4 +1,5 @@
-<p><%= display_full_log changelog, show_user: show_user %>
+<p id="<%= "changelog-#{changelog.id}" %>">
+	<%= display_full_log changelog, show_user: show_user %>
 	&nbsp;
 	<% if date_is_today changelog.updated_at  %>
 		<span class="label label-success" title="Updated Today">Today</span>

@@ -5,6 +5,5 @@ module EventsHelper
 		else
 			datetime.strftime("%B %d %Y - %H:%M")
 		end
-		
 	end
 end

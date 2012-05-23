@@ -218,6 +218,8 @@ class UsersControllerTest < ActionController::TestCase
     refute admin_after_delete_attempt.nil?
   end
 
+  # collateral effects after deletion
+
   test "upon successful account destroy events of that user should be destroyed" do
     sign_in @admin
 
