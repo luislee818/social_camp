@@ -3,5 +3,5 @@ class ApplicationController < ActionController::Base
 
   include SessionsHelper
   include AuthenticationHelper
-  include ChangelogHelper
+  include ProgressesHelper
 end

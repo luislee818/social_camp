@@ -9,3 +9,8 @@ discussion_without_comments:
   subject: Subject of a disucssion without comments
   content: Content of a discussion without comments
   user: jane
+
+discussion_with_long_subject:
+  subject: <%= 'a' * 100 %>
+  content: Content of a discussion with comments
+  user: john
