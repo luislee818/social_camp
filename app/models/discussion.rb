@@ -5,13 +5,6 @@ class Discussion < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   has_many :changelogs, as: :trackable
 
-  scope :past, where("updated_at < ?", Date.today.beginning_of_day.utc).order('updated_at desc')
-  scope :today, lambda { 
-    where("updated_at >= ? and updated_at <= ?", 
-           Date.today.beginning_of_day.utc, Date.today.end_of_day.utc)
-    .order('updated_at desc')
-  }
-  
   attr_accessible :content, :subject
 
   validates :subject, presence: true, length: { maximum: 50 }

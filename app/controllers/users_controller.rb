@@ -58,10 +58,6 @@ class UsersController < ApplicationController
       user = User.find(params[:id])
       current_user?(user)
     end
-
-    def require_current_user
-      redirect_to root_path unless attempt_to_access_own_profile?
-    end
     
     def require_current_user_or_admin
       unless attempt_to_access_own_profile? || current_user.admin?

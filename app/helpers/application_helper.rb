@@ -1,9 +1,11 @@
 module ApplicationHelper
+  include ERB::Util
+    
   ALLOWED_TAGS_IN_POSTED_CONTENT = %w(p br)
   
   def full_title(page_title)
     full_title = "SocialCamp"
-    if page_title.empty?
+    if page_title.blank?
       full_title
     else
       "#{full_title} | #{page_title}"
@@ -26,10 +28,6 @@ module ApplicationHelper
   	date.to_date == Date.yesterday
   end
 
-  def time_is_within_fifteen_minutes(date)
-  	
-  end
-  
   def strong(content)
     "<strong>#{h content}</strong>".html_safe
   end

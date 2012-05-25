@@ -91,9 +91,9 @@ module ProgressesHelper
         display_title = truncate(log.trackable.display_title, length: DISPLAY_TITLE_MAX_LENGTH)
       end
 
-      "#{username}
-       #{verb}
-       #{trackable_type.downcase}
+      "#{username}\
+       #{verb}\
+       #{trackable_type.downcase}\
        #{display_title}"
      end
   end
@@ -102,8 +102,10 @@ module ProgressesHelper
     return nil if log.trackable.nil?
     
     case log.trackable_type
-    when TrackableType::DISCUSSION, TrackableType::COMMENT
+    when TrackableType::DISCUSSION
       discussion_url(log.trackable_id)
+    when TrackableType::COMMENT
+      comment_url(log.trackable_id)
     when TrackableType::EVENT
       event_url(log.trackable_id)
     else

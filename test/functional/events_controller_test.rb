@@ -272,6 +272,38 @@ class EventsControllerTest < ActionController::TestCase
     assert_redirected_to events_path
   end
 
+  test "event should not be updated when name is not provided" do
+    sign_in @john
+
+    old_name = @event.name
+
+    updated_location = "Lorem Ipsum"
+    updated_description = "More Lorem Ipsum"
+    updated_time = Time.now
+    put :update, id: @event.id, event: { name: nil, location: updated_location,
+                 description: updated_description, start_at: updated_time }
+
+    event = Event.find @event.id
+    assert_equal old_name, event.name
+    assert_template 'edit'
+  end
+
+  test "event should not be updated when start_at is not provided" do
+    sign_in @john
+
+    old_time = @event.start_at
+
+    updated_name = "foobar"
+    updated_location = "Lorem Ipsum"
+    updated_description = "More Lorem Ipsum"
+    put :update, id: @event.id, event: { name: nil, location: updated_location,
+                 description: updated_description, start_at: nil }
+
+    event = Event.find @event.id
+    assert_equal old_time, event.start_at
+    assert_template 'edit'
+  end
+
   test "user can update an event created by herself" do
     sign_in @john
 

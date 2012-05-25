@@ -253,6 +253,32 @@ class DiscussionsControllerTest < ActionController::TestCase
     assert_redirected_to discussions_path
   end
 
+  test "discussion should not be updated when subject is not provided" do
+    sign_in @john
+
+    old_subject = @discussion_with_comments.subject
+    updated_content = "Lorem Ipsum"
+    put :update, id: @discussion_with_comments.id, discussion: { subject: nil,
+                                                                 content: updated_content }
+
+    discussion = Discussion.find @discussion_with_comments.id
+    assert_equal old_subject, discussion.subject
+    assert_template 'edit'
+  end
+
+  test "discussion should not be updated when content is not provided" do
+    sign_in @john
+
+    old_content = @discussion_with_comments.content
+    updated_subject = "foobar"
+    put :update, id: @discussion_with_comments.id, discussion: { subject: updated_subject,
+                                                                 content: nil }
+
+    discussion = Discussion.find @discussion_with_comments.id
+    assert_equal old_content, discussion.content
+    assert_template 'edit'
+  end
+
   test "user can update a discussion created by herself" do
     sign_in @john
 

@@ -11,10 +11,6 @@ module SessionsHelper
     cookies.delete :user_id
   end
   
-  def current_user=(user)
-    @current_user = user
-  end
-  
   def current_user
     @current_user ||= user_from_recognized_cookie
   end
@@ -38,7 +34,7 @@ module SessionsHelper
   end
   
   private
-  
+
     def user_from_recognized_cookie
       User.find(cookies[:user_id]) if cookies[:user_id]
     end
