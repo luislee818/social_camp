@@ -10,12 +10,16 @@ class EventsControllerTest < ActionController::TestCase
   }
 
   setup do
-    @john = users(:john)
-    @jane = users(:jane)
-    @admin = users(:admin)
-    @event = events(:open)
-    @event_without_location = events(:event_without_location)
-    @event_without_description = events(:event_without_description)
+    # users
+    @john = Factory(:john)
+    @jane = Factory(:jane)
+    @admin = Factory(:admin)
+
+    # events
+    @event = Factory(:event, user: @john)
+    @event_without_location = Factory(:event, location: nil)
+    @event_without_description = Factory(:event, description: nil)
+    Factory(:event, start_at: Time.now + 2.days, user: @john)
   end
 
   # Show events-------------------------------------------------

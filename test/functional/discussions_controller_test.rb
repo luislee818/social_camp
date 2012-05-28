@@ -13,11 +13,18 @@ class DiscussionsControllerTest < ActionController::TestCase
   # TODO: use model.reload instead of updated_model?
   
   setup do
-    @john = users(:john)
-    @jane = users(:jane)
-    @admin = users(:admin)
-    @discussion_with_comments = discussions(:discussion_with_comments)
-    @discussion_without_comments = discussions(:discussion_without_comments)
+    # users
+    @john = Factory(:john)
+    @jane = Factory(:jane)
+    @admin = Factory(:admin)
+    
+    # a discussion with comments
+    @discussion_with_comments = Factory(:discussion, user: @john)
+    Factory(:comment, discussion: @discussion_with_comments, user: @john)
+    Factory(:comment, discussion: @discussion_with_comments, user: @jane)
+        
+    # a discussion without comments
+    @discussion_without_comments = Factory(:discussion, user: @john)
   end
 
    # Show discussions-------------------------------------------------

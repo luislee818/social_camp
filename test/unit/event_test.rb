@@ -11,7 +11,7 @@ class EventTest < ActiveSupport::TestCase
   }
   
   setup do
-    @john = users(:john)
+    @john = Factory(:john)
   end
 
   # validations

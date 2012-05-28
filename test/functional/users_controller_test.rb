@@ -2,9 +2,22 @@ require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
   setup do
-    @john = users(:john)
-    @jane = users(:jane)
-    @admin = users(:admin)
+    # users
+    @john = Factory(:john)
+    @jane = Factory(:jane)
+    @admin = Factory(:admin)
+    
+    # discussion
+    @discussion = Factory(:discussion, user: @john)
+    
+    # comment
+    Factory(:comment, discussion: @discussion, user: @john)
+    
+    # event
+    Factory(:event, user: @john)
+    
+    # changelog
+    Factory(:changelog_add, trackable: @discussion, user: @john)
   end
 
   # Index ----------------------------------------------
@@ -149,7 +162,6 @@ class UsersControllerTest < ActionController::TestCase
     john = User.find @john.id
     assert_equal @john.name, john.name
     assert_equal @john.email, john.email
-    assert_equal @john.password_digest, john.password_digest
   end
   
   test "user should update profile with valid information" do

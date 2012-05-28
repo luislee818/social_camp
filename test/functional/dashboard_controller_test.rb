@@ -2,7 +2,18 @@ require 'test_helper'
 
 class DashboardControllerTest < ActionController::TestCase
   setup do
-    @user = users(:john)
+    # user
+    @john = Factory(:john)
+    
+    # discussions
+    5.times do |i|
+      Factory(:discussion, user: @john)      
+    end
+    
+    # events
+    5.times do |i|
+      Factory(:event, user: @john)
+    end
   end
 
   test "user should signin before viewing dashboard page" do
@@ -14,7 +25,7 @@ class DashboardControllerTest < ActionController::TestCase
   end
 
   test "user should be able to view dashboard page after sign in" do
-    sign_in @user
+    sign_in @john
 
     get :home
 

@@ -1,7 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-add_discussion:
-  trackable: discussion_with_comments
-  trackable_type: Discussion
-  action_type_id: 1
-  user: john

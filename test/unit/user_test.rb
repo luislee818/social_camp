@@ -21,6 +21,10 @@ class UserTest < ActiveSupport::TestCase
   NAME_TOO_LONG = "a" * 21
   PASSWORD_VALID = "1234Abcd"
   PASSWORD_TOO_SHORT = "a" * 5
+  
+  setup do
+    @user = Factory(:user)
+  end
 
   test "user should have a name" do
   	user = create(name: nil)
@@ -153,28 +157,24 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user should authenticate with correct password" do
-  	user = users(:john)
   	correct_password = PASSWORD_VALID
 
-  	assert_equal user, user.authenticate(correct_password)
+  	assert_equal @user, @user.authenticate(correct_password)
   end
 
   test "user should not authenticate with incorrect password" do
-  	user = users(:john)
-  	correct_password = PASSWORD_VALID.reverse
+  	incorrect_password = @user.password.reverse
 
-  	refute user.authenticate(correct_password)
+  	refute @user.authenticate(incorrect_password)
   end
 
   test "user should respond to attribute calls" do
-  	user = users(:john)
-
-  	assert user.respond_to? :name
-  	assert user.respond_to? :email
-  	assert user.respond_to? :password_digest
-  	assert user.respond_to? :password
-  	assert user.respond_to? :password_confirmation
-  	assert user.respond_to? :authenticate
+  	assert @user.respond_to? :name
+  	assert @user.respond_to? :email
+  	assert @user.respond_to? :password_digest
+  	assert @user.respond_to? :password
+  	assert @user.respond_to? :password_confirmation
+  	assert @user.respond_to? :authenticate
   end
   
   private

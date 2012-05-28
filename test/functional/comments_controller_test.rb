@@ -8,11 +8,15 @@ class CommentsControllerTest < ActionController::TestCase
   }
   
   setup do
-    @john = users(:john)
-    @jane = users(:jane)
-    @admin = users(:admin)
-    @discussion = discussions(:discussion_with_comments)
-    @comment = comments(:first_comment)
+    # users
+    @john = Factory(:john)
+    @jane = Factory(:jane)
+    @admin = Factory(:admin)
+
+    # a discussion with comments
+    @discussion = Factory(:discussion, user: @john)
+    @comment = Factory(:comment, discussion: @discussion, user: @john)
+    Factory(:comment, discussion: @discussion, user: @jane)
   end
 
   # Create comment-------------------------------------------------

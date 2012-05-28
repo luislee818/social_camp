@@ -3,8 +3,8 @@ require 'test_helper'
 class SessionsHelperTest < ActionView::TestCase
 
 	setup do
-		@john = users(:john)
-		@jane = users(:jane)
+		@john = Factory(:john)
+		@jane = Factory(:jane)
 	end
 
 	# sign_in

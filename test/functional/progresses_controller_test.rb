@@ -1,6 +1,23 @@
 require 'test_helper'
 
 class ProgressesControllerTest < ActionController::TestCase
+  setup do
+    # user
+    @john = Factory(:john)
+    
+    # trackables and changelogs
+    discussion = Factory(:discussion, user: @john)
+    Factory(:changelog_add, trackable: discussion, user: @john)
+    
+    comment = Factory(:comment, discussion: discussion, user: @john)
+    Factory(:changelog_add, trackable: comment, user: @john)
+    Factory(:changelog_destroy, trackable: comment, user: @john)
+    
+    event = Factory(:event, user: @john)
+    Factory(:changelog_add, trackable: event, user: @john)
+    Factory(:changelog_update, trackable: event, user: @john)
+  end
+  
   test "user should login before viewing progress page" do
   	make_sure_user_is_not_signed_in
 
@@ -10,8 +27,7 @@ class ProgressesControllerTest < ActionController::TestCase
   end
 
   test "progress page should have title 'SocialCamp | Progress'" do
-  	user = users(:john)
-  	sign_in user
+  	sign_in @john
 
     get :all
     assert_select 'title', 'SocialCamp | Progress'

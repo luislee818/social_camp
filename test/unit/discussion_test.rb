@@ -11,11 +11,17 @@ class DiscussionTest < ActiveSupport::TestCase
   }
   
   setup do
-    @john = users(:john)
-    @jane = users(:jane)
-    @discussion_with_comments = discussions(:discussion_with_comments)
-    @last_comment = comments(:second_comment)
-    @discussion_without_comments = discussions(:discussion_without_comments)
+    # users
+    @john = Factory(:john)
+    @jane = Factory(:jane)
+
+    # a discussion with comments
+    @discussion_with_comments = Factory(:discussion, user: @john)
+    Factory(:comment, discussion: @discussion_with_comments, user: @john)
+    @last_comment = Factory(:comment, discussion: @discussion_with_comments, user: @jane)
+    
+    # a discussion without comments
+    @discussion_without_comments = Factory(:discussion, user: @jane)
   end
 
   # Validations
@@ -77,9 +83,7 @@ class DiscussionTest < ActiveSupport::TestCase
     assert_equal @discussion_without_comments.updated_at, @discussion_without_comments.last_update_time
   end
 
-  test "last_update_time for a discussion with comments should be the same as the last update time of the last comment" do
-    assert_equal @last_comment.updated_at, @discussion_with_comments.last_update_time
-  end
+  # Note: last_update_time for a discussion with comments will be covered in functional tests of CommentsController
 
   # touch
 

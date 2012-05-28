@@ -8,8 +8,13 @@ class CommentTest < ActiveSupport::TestCase
   }
   
   setup do
-    @john = users(:john)
-    @discussion = discussions(:discussion_with_comments)
+    # users
+    @john = Factory(:john)
+
+    # a discussion with comments
+    @discussion = Factory(:discussion, user: @john)
+    Factory(:comment, discussion: @discussion, user: @john)
+    Factory(:comment, discussion: @discussion, user: @john)
   end
 
   # validations

@@ -3,7 +3,7 @@ require 'test_helper'
 class UsersHelperTest < ActionView::TestCase
 
 	setup do
-		@user = users(:john)
+		@user = Factory(:john)
 	end
 
 	# gravatar_for

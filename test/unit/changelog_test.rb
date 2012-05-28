@@ -8,8 +8,13 @@ class ChangelogTest < ActiveSupport::TestCase
   }
   
   setup do
-    @user = users(:john)
-    @discussion = discussions(:discussion_with_comments)
+    # users
+    @john = Factory(:john)
+
+    # a discussion with comments
+    @discussion = Factory(:discussion, user: @john)
+    Factory(:comment, discussion: @discussion, user: @john)
+    Factory(:comment, discussion: @discussion, user: @john)
   end
 
   # validations
@@ -20,7 +25,7 @@ class ChangelogTest < ActiveSupport::TestCase
 
   	assert changelog.invalid?
 
-  	changelog.user_id = @user.id
+  	changelog.user_id = @john.id
 
   	assert changelog.valid?
   end
@@ -28,7 +33,7 @@ class ChangelogTest < ActiveSupport::TestCase
   test "changelog should have action_type_id" do
   	trackable = @discussion
   	changelog = build_changelog_for_trackable(trackable, action_type_id: nil)
-  	changelog.user_id = @user.id
+  	changelog.user_id = @john.id
 
   	assert changelog.invalid?
 
@@ -41,7 +46,7 @@ class ChangelogTest < ActiveSupport::TestCase
   	trackable = @discussion
 
   	changelog = Changelog.new do |c|
-  		c.user_id = @user.id
+  		c.user_id = @john.id
   		c.action_type_id = ACTION_TYPE_ID_VALID
   		c.save
   	end
