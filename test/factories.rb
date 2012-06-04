@@ -11,7 +11,7 @@ FactoryGirl.define do
   
   factory :john, class: :user do
     name 'john'
-    email 'john2@nltechdev.com'
+    email 'john@nltechdev.com'
     password '1234Abcd'
     password_confirmation '1234Abcd'
     admin false
@@ -19,7 +19,7 @@ FactoryGirl.define do
   
   factory :jane, class: :user do
     name 'jane'
-    email 'jane2@nltechdev.com'
+    email 'jane@nltechdev.com'
     password '1234Abcd'
     password_confirmation '1234Abcd'
     admin false
@@ -27,7 +27,7 @@ FactoryGirl.define do
   
   factory :admin, class: :user do
     name 'amin'
-    email 'admin2@nltechdev.com'
+    email 'admin@nltechdev.com'
     password '1234Abcd'
     password_confirmation '1234Abcd'
     admin true

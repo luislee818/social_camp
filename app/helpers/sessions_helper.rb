@@ -36,7 +36,7 @@ module SessionsHelper
   private
 
     def user_from_recognized_cookie
-      User.find(cookies[:user_id]) if cookies[:user_id]
+      User.find(cookies[:user_id]) unless cookies[:user_id].blank?
     end
     
     def clear_requested_page

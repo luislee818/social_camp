@@ -19,3 +19,6 @@
 
 # Ignore Heroku .env file
 .env
+
+# Ignore Vim .swp file
+.swp
