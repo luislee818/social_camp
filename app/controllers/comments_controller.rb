@@ -24,7 +24,7 @@ class CommentsController < ApplicationController
 
   def edit
     @comment = Comment.includes(:user, :discussion).find(params[:id])
-    
+
     unless @comment.user == current_user or current_user.admin?
       redirect_to @comment.discussion and return
     end
@@ -32,30 +32,30 @@ class CommentsController < ApplicationController
 
   def update
     @comment = Comment.includes(:discussion).find(params[:id])
-    
+
     unless @comment.user == current_user or current_user.admin?
       redirect_to discussions_path and return
     end
-    
+
     @comment.update_attributes(params[:comment])
 
     log_update @comment
     @comment.discussion.touch
-    
+
     redirect_to @comment.discussion, flash: { success: "Comment had been updated." }
   end
 
   def destroy
     @comment = Comment.includes(:discussion).find(params[:id])
-    
+
     unless @comment.user == current_user or current_user.admin?
       redirect_to discussions_path and return
     end
-    
+
     @comment.destroy
     log_destroy @comment
     @comment.discussion.touch
-    
+
     redirect_to @comment.discussion, flash: { success: "Comment had been destroyed." }
   end
 end

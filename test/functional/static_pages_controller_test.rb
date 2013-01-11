@@ -6,7 +6,7 @@ class StaticPagesControllerTest < ActionController::TestCase
     get :home
     assert_response :success
   end
-  
+
   test "home page title should be 'SocialCamp'" do
     make_sure_user_is_not_signed_in
     get :home
@@ -18,7 +18,7 @@ class StaticPagesControllerTest < ActionController::TestCase
     get :help
     assert_response :success
   end
-  
+
   test "help page title should be 'SocialCamp | Help'" do
     make_sure_user_is_not_signed_in
     get :help
@@ -30,7 +30,7 @@ class StaticPagesControllerTest < ActionController::TestCase
     get :about
     assert_response :success
   end
-  
+
   test "about page title should be 'SocialCamp | About Us'" do
     make_sure_user_is_not_signed_in
     get :about
@@ -42,7 +42,7 @@ class StaticPagesControllerTest < ActionController::TestCase
     get :contact
     assert_response :success
   end
-  
+
   test "home page title should be 'SocialCamp | Contact'" do
     make_sure_user_is_not_signed_in
     get :contact

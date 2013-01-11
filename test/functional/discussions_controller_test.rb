@@ -4,25 +4,25 @@ class DiscussionsControllerTest < ActionController::TestCase
   SUBJECT_VALID = "Foo"
   SUBJECT_TOO_LONG = "f" * 51
   CONTENT_VALID = "Lorem Ipsum"
-  
+
   DEFAULT_OPTIONS = {
     subject: SUBJECT_VALID,
     content: CONTENT_VALID
   }
-  
+
   # TODO: use model.reload instead of updated_model?
-  
+
   setup do
     # users
     @john = Factory(:john)
     @jane = Factory(:jane)
     @admin = Factory(:admin)
-    
+
     # a discussion with comments
     @discussion_with_comments = Factory(:discussion, user: @john)
     Factory(:comment, discussion: @discussion_with_comments, user: @john)
     Factory(:comment, discussion: @discussion_with_comments, user: @jane)
-        
+
     # a discussion without comments
     @discussion_without_comments = Factory(:discussion, user: @john)
   end
@@ -31,7 +31,7 @@ class DiscussionsControllerTest < ActionController::TestCase
 
   test "user should sign in before viewing discussions" do
     make_sure_user_is_not_signed_in
-    
+
     get :index
 
     assert_redirected_to signin_path
@@ -89,9 +89,9 @@ class DiscussionsControllerTest < ActionController::TestCase
 
   test "user should signin before creating discussion" do
     make_sure_user_is_not_signed_in
-    
+
     post :create, discussion: DEFAULT_OPTIONS
-    
+
     assert_redirected_to signin_path
   end
 
@@ -445,7 +445,7 @@ class DiscussionsControllerTest < ActionController::TestCase
 
       assert_equal c.final_words, changelog.destroyed_content_summary
       assert_equal ActionType::DESTROY, changelog.action_type_id
-      assert_equal @john.id, changelog.user_id             
+      assert_equal @john.id, changelog.user_id
     end
   end
 
@@ -455,7 +455,7 @@ class DiscussionsControllerTest < ActionController::TestCase
     discussion = @discussion_with_comments
 
     comments = discussion.comments.dup
-    
+
     delete :destroy, id: discussion.id
 
     assert comments.count > 0
@@ -467,7 +467,7 @@ class DiscussionsControllerTest < ActionController::TestCase
 
       assert_equal c.final_words, changelog.destroyed_content_summary
       assert_equal ActionType::DESTROY, changelog.action_type_id
-      assert_equal @admin.id, changelog.user_id             
+      assert_equal @admin.id, changelog.user_id
     end
   end
 

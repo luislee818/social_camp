@@ -38,7 +38,7 @@ class Discussion < ActiveRecord::Base
   def touch
     update_attribute :updated_at, Time.now
   end
-  
+
   private
 
     def last_comment

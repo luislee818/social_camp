@@ -1,8 +1,8 @@
 module ApplicationHelper
   include ERB::Util
-    
+
   ALLOWED_TAGS_IN_POSTED_CONTENT = %w(p br)
-  
+
   def full_title(page_title)
     full_title = "SocialCamp"
     if page_title.blank?
@@ -11,7 +11,7 @@ module ApplicationHelper
       "#{full_title} | #{page_title}"
     end
   end
-  
+
   def sanitize_allow_minimal_html(content)
     sanitize (simple_format content), tags: ALLOWED_TAGS_IN_POSTED_CONTENT
   end

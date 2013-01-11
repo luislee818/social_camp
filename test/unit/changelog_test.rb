@@ -6,7 +6,7 @@ class ChangelogTest < ActiveSupport::TestCase
   DEFAULT_OPTIONS = {
     action_type_id: ACTION_TYPE_ID_VALID
   }
-  
+
   setup do
     # users
     @john = Factory(:john)

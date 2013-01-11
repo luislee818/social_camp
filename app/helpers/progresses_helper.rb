@@ -27,22 +27,22 @@ module ProgressesHelper
   	verb = ACTION_VERBS[log.action_type_id]
   	time = time_ago_in_words log.created_at
   	user = User.find_by_id log.user_id
-  	
+
   	"#{verb.capitalize} #{time} ago by #{user.name}" unless user.nil?
   end
 
   def display_full_log(log, options = {})
     default_options = { show_user: true, show_relative_timestamp: true }
     options = default_options.merge(options)
-    
+
     user = User.find_by_id log.user_id
-    
+
     unless user.nil?
       verb = ACTION_VERBS[log.action_type_id]
       time = time_ago_in_words log.created_at
       username = user.name
       trackable_type = log.trackable_type
-      
+
       if options[:show_relative_timestamp]
         timestamp = "<span class='timestamp'>#{time_ago_in_words log.created_at}&nbsp;ago</span>"
       else
@@ -74,10 +74,10 @@ module ProgressesHelper
       end
      end
   end
-  
+
   def display_text_log(log)
     user = User.find_by_id log.user_id
-    
+
     unless user.nil?
       verb = ACTION_VERBS[log.action_type_id]
       username = user.name
@@ -97,10 +97,10 @@ module ProgressesHelper
        #{display_title}"
      end
   end
-  
+
   def get_trackable_url(log)
     return nil if log.trackable.nil?
-    
+
     case log.trackable_type
     when TrackableType::DISCUSSION
       discussion_url(log.trackable_id)
@@ -118,7 +118,7 @@ module ProgressesHelper
     def log_change(trackable_object, action_type, user_id)
       raise "invalid action_type: #{action_type}" unless ActionType::All.include? action_type
 
-      changelog = trackable_object.changelogs.build user_id: user_id, 
+      changelog = trackable_object.changelogs.build user_id: user_id,
                                                     action_type_id: action_type
 
       changelog.destroyed_content_summary = trackable_object.final_words if action_type == ActionType::DESTROY

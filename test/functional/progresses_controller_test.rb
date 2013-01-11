@@ -4,20 +4,20 @@ class ProgressesControllerTest < ActionController::TestCase
   setup do
     # user
     @john = Factory(:john)
-    
+
     # trackables and changelogs
     discussion = Factory(:discussion, user: @john)
     Factory(:changelog_add, trackable: discussion, user: @john)
-    
+
     comment = Factory(:comment, discussion: discussion, user: @john)
     Factory(:changelog_add, trackable: comment, user: @john)
     Factory(:changelog_destroy, trackable: comment, user: @john)
-    
+
     event = Factory(:event, user: @john)
     Factory(:changelog_add, trackable: event, user: @john)
     Factory(:changelog_update, trackable: event, user: @john)
   end
-  
+
   test "user should login before viewing progress page" do
   	make_sure_user_is_not_signed_in
 

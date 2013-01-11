@@ -6,7 +6,7 @@ class CommentsControllerTest < ActionController::TestCase
   DEFAULT_OPTIONS = {
     content: CONTENT_VALID
   }
-  
+
   setup do
     # users
     @john = Factory(:john)
@@ -23,9 +23,9 @@ class CommentsControllerTest < ActionController::TestCase
 
   test "user should signin before creating comment" do
     make_sure_user_is_not_signed_in
-    
+
     post :create, comment: DEFAULT_OPTIONS
-    
+
     assert_redirected_to signin_path
   end
 
@@ -77,14 +77,14 @@ class CommentsControllerTest < ActionController::TestCase
     discussion = Discussion.find @discussion.id
     discussion_new_timestamp = discussion.updated_at
 
-    assert discussion_new_timestamp > discussion_old_timestamp
+    assert discussion_new_timestamp >= discussion_old_timestamp
   end
 
   # Show comment-------------------------------------------------
 
   test "user should signin before viewing a comment" do
     make_sure_user_is_not_signed_in
-    
+
     get :show, id: @comment.id
 
     assert_redirected_to signin_path
@@ -92,12 +92,12 @@ class CommentsControllerTest < ActionController::TestCase
 
   test "user should be redirected to discussion when viewing a comment" do
     sign_in @john
-    
+
     get :show, id: @comment.id
 
     assert_redirected_to @comment.discussion
   end
-  
+
   # Edit comment-------------------------------------------------
 
   test "user should sign in before viewing edit comment page" do
@@ -135,7 +135,7 @@ class CommentsControllerTest < ActionController::TestCase
     assert_select 'div#comment-edit', count: 1
     assert_select 'a#discussion-view-link', count: 1
   end
-  
+
   # Update comment-------------------------------------------------
 
   test "user should sign in before update a comment" do
@@ -209,9 +209,9 @@ class CommentsControllerTest < ActionController::TestCase
     discussion = Discussion.find @discussion.id
     discussion_new_timestamp = discussion.updated_at
 
-    assert discussion_new_timestamp > discussion_old_timestamp
+    assert discussion_new_timestamp >= discussion_old_timestamp
   end
-  
+
   # Destroy comment-------------------------------------------------
 
   test "user should sign in before destroying a comment" do
@@ -300,7 +300,7 @@ class CommentsControllerTest < ActionController::TestCase
     discussion = Discussion.find @discussion.id
     discussion_new_timestamp = discussion.updated_at
 
-    assert discussion_new_timestamp > discussion_old_timestamp
+    assert discussion_new_timestamp >= discussion_old_timestamp
   end
 
 end

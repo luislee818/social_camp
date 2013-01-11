@@ -21,7 +21,7 @@ class UserTest < ActiveSupport::TestCase
   NAME_TOO_LONG = "a" * 21
   PASSWORD_VALID = "1234Abcd"
   PASSWORD_TOO_SHORT = "a" * 5
-  
+
   setup do
     @user = Factory(:user)
   end
@@ -112,7 +112,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "user email should be unique" do
   	user = create()
-  	
+
   	user_with_same_email = user.dup
     user_with_same_email.name = "foo #{user.name}"
 
@@ -146,7 +146,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "password_confirmation should be present" do
   	user = create(password_confirmation: nil)
-  	
+
   	assert user.invalid?
   end
 
@@ -176,7 +176,7 @@ class UserTest < ActiveSupport::TestCase
   	assert @user.respond_to? :password_confirmation
   	assert @user.respond_to? :authenticate
   end
-  
+
   private
     def create(options = {})
       User.new({

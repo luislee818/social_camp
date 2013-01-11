@@ -14,12 +14,12 @@ class User < ActiveRecord::Base
   has_many :discussions, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :changelogs, dependent: :destroy
-  
+
   attr_accessible :email, :name, :password, :password_confirmation
 
   VALID_EMAIL_REGEX = /\A[\w-]+@nltechdev.com\z/i
 
-  validates :name, presence: true, length: { maximum: 20 }, 
+  validates :name, presence: true, length: { maximum: 20 },
         uniqueness: { case_sensitive: true }
 
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },

@@ -4,12 +4,12 @@ class DashboardControllerTest < ActionController::TestCase
   setup do
     # user
     @john = Factory(:john)
-    
+
     # discussions
     5.times do |i|
-      Factory(:discussion, user: @john)      
+      Factory(:discussion, user: @john)
     end
-    
+
     # events
     5.times do |i|
       Factory(:event, user: @john)
@@ -18,9 +18,9 @@ class DashboardControllerTest < ActionController::TestCase
 
   test "user should signin before viewing dashboard page" do
     make_sure_user_is_not_signed_in
-    
+
     get :home
-    
+
     assert_redirected_to signin_path
   end
 
@@ -39,5 +39,5 @@ class DashboardControllerTest < ActionController::TestCase
     assert_select 'div#upcoming_events tr[id *= event-]', count: assigns(:upcoming_events).size
     assert_select 'a#events-link', count: 1
   end
-  
+
 end

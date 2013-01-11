@@ -25,7 +25,7 @@ class EventsControllerTest < ActionController::TestCase
   # Show events-------------------------------------------------
   test "user should sign in before viewing events" do
     make_sure_user_is_not_signed_in
-    
+
     get :index
 
     assert_redirected_to signin_path
@@ -93,7 +93,7 @@ class EventsControllerTest < ActionController::TestCase
     make_sure_user_is_not_signed_in
 
     post :create, event: DEFAULT_OPTIONS
-    
+
     assert_redirected_to signin_path
   end
 
@@ -333,7 +333,7 @@ class EventsControllerTest < ActionController::TestCase
     sign_in @admin
 
     updated_name = "foobar"
-    updated_location = "Lorem Ipsum"  
+    updated_location = "Lorem Ipsum"
     updated_description = "More Lorem Ipsum"
     updated_time = Time.now
     put :update, id: @event.id, event: { name: updated_name, location: updated_location,

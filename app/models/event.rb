@@ -6,7 +6,7 @@ class Event < ActiveRecord::Base
 
   scope :upcoming, where("start_at > ?", Time.now).order('start_at asc')
   scope :past, where("start_at < ?", Time.now).order('start_at desc')
-  
+
   attr_accessible :description, :location, :name, :start_at
   validates :name, presence: true, length: { maximum: 100 }
   validates :start_at, presence: true

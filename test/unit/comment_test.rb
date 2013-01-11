@@ -6,7 +6,7 @@ class CommentTest < ActiveSupport::TestCase
   DEFAULT_OPTIONS = {
     content: CONTENT_VALID
   }
-  
+
   setup do
     # users
     @john = Factory(:john)
@@ -39,7 +39,7 @@ class CommentTest < ActiveSupport::TestCase
 
   test "comment should have user_id" do
     comment = build_event_for_discussion(@discussion)
- 
+
   	assert comment.invalid?
 
   	comment.user_id = @john.id
@@ -48,19 +48,19 @@ class CommentTest < ActiveSupport::TestCase
   end
 
     # display_title
-  
+
   test "display_title should be the same as comment content" do
     comment = create()
-    
+
     assert_equal CONTENT_VALID, comment.content
   end
 
     private
-  
+
     def create(options = {})
       Comment.new(DEFAULT_OPTIONS.merge(options))
     end
-  
+
     def build_event_for_discussion(discussion, options = {})
       discussion.comments.build(DEFAULT_OPTIONS.merge(options))
     end

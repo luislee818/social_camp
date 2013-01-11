@@ -25,7 +25,7 @@ class UserStoriesTest < ActionDispatch::IntegrationTest
     # redirect to previous page
     assert_response :redirect
     follow_redirect!
-    assert_response :success 
+    assert_response :success
     assert_template 'show', id: @discussion_with_comments.id
   end
 
