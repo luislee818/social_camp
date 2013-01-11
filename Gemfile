@@ -12,6 +12,7 @@ gem 'simplecov'
 
 gem 'autotest'
 gem 'autotest-rails'
+gem 'ZenTest', "4.6.0"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
