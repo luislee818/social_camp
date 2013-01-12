@@ -4,6 +4,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require 'capybara/rails'
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
@@ -22,4 +23,13 @@ class ActiveSupport::TestCase
   end
 
   alias :make_sure_user_is_not_signed_in :sign_out
+end
+
+class ActionDispatch::IntegrationTest
+  include Capybara::DSL
+
+  def teardown
+    Capybara.reset_sessions!
+    Capybara.use_default_driver
+  end
 end
