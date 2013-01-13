@@ -1,23 +1,23 @@
 SocialCamp::Application.routes.draw do
 
   # root
-  root :to => 'static_pages#home'
+  root to: 'static_pages#home'
 
   # dashboard
   match "/dashboard", to: 'dashboard#home'
-  
+
   # resources
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
   resources :discussions
   resources :events
   resources :comments, only: [:create, :edit, :show, :update, :destroy]
-  
+
   # user profile
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
-  
+
   # static pages
   match '/help', to: 'static_pages#help'
   match '/about', to: 'static_pages#about'
@@ -25,7 +25,7 @@ SocialCamp::Application.routes.draw do
 
   # progresses
   match '/progress', to: 'progresses#all'
-  
+
   # feeds
   match 'feeds/discussions(.:format)', to: 'feeds#discussions', as: :feeds_discussions, defaults: { format: 'rss' }
   match 'feeds/events(.:format)', to: 'feeds#events', as: :feeds_events, defaults: { format: 'rss' }
