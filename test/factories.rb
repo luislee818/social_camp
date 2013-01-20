@@ -7,30 +7,24 @@ FactoryGirl.define do
     sequence(:email) { |n| "person_#{n}@nltechdev.com" }
     password "1234Abcd"
     password_confirmation "1234Abcd"
-  end
-
-  factory :john, class: :user do
-    name 'john'
-    email 'john@nltechdev.com'
-    password '1234Abcd'
-    password_confirmation '1234Abcd'
     admin false
-  end
 
-  factory :jane, class: :user do
-    name 'jane'
-    email 'jane@nltechdev.com'
-    password '1234Abcd'
-    password_confirmation '1234Abcd'
-    admin false
-  end
+    factory :john do
+      name 'John'
+    end
 
-  factory :admin, class: :user do
-    name 'amin'
-    email 'admin@nltechdev.com'
-    password '1234Abcd'
-    password_confirmation '1234Abcd'
-    admin true
+    factory :jane do
+      name 'Jane'
+    end
+
+    factory :dapeng do
+      name 'Dapeng'
+    end
+
+    factory :admin do
+      name 'Admin'
+      admin true
+    end
   end
 
   # discussions
