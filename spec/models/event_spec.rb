@@ -2,8 +2,11 @@ require 'spec_helper'
 
 describe Event do
 	before do
+    @john = Factory(:john)
+
 		@event = Event.new(name: "Learn some new stuff", location: "Anywhere you like",
 											 description: "Something really fun", start_at: rand(10).days.ago)
+    @event.user_id = @john.id
 	end
 
 	subject { @event }
@@ -14,6 +17,8 @@ describe Event do
 	it { should respond_to(:start_at) }
 	it { should respond_to(:user_id) }
 	it { should respond_to(:display_title) }
+
+  it { should be_valid }
 
 	its(:display_title) { should == @event.name }
 

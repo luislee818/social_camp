@@ -16,6 +16,8 @@ describe Comment do
 
 	subject { @comment }
 
+	it { should be_valid }
+
 	its(:display_title) { should == @comment.content }
 
 	describe "when content is not present" do

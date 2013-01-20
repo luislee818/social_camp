@@ -27,6 +27,8 @@ describe Discussion do
 	it { should respond_to(:user_id) }
 	it { should respond_to(:display_title) }
 
+	it { should be_valid }
+
 	its(:display_title) { should == @discussion.subject }
 
 	describe "when subject is not present" do
