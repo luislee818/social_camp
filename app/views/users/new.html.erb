@@ -4,13 +4,13 @@
   <div class="span6 offset3" id="user-new">
     <%= form_for @user, :html => { :class => "well" } do |f| %>
 	  <%= render 'shared/error_messages', object: @user %>
-	
+
       <%= f.label :name, class: 'required' %>
       <%= f.text_field :name %>
 
       <%= f.label :email, "Email (must end with @nltechdev.com)", class: 'required' %>
 	  <%= f.email_field :email %>
-		
+
       <%= f.label :password, class: 'required' %>
       <%= f.password_field :password %>
 
