@@ -59,6 +59,32 @@ describe "User pages" do
 		end
 	end
 
+	describe "delete links" do
+		it "should not have delete link"
+
+		describe "as an admin user" do
+			it "should have delete link"
+
+			it "should be able to delete another user"
+
+			it "should not have delete link for the admin user herself"
+		end
+	end
+
+	describe "profile page" do
+		let(:user) { FactoryGirl.create(:user) }
+		let(:foobar) { FactoryGirl.create(:user) }
+
+		before do
+			sign_in foobar
+			visit user_path(user)
+		end
+
+		it { should have_selector('h2', text: user.name) }
+
+		it { should have_selector('title', text: user.name) }
+	end
+
   describe "signup page" do
     before { visit signup_path }
 
@@ -109,4 +135,49 @@ describe "User pages" do
       end
     end
   end
+
+	describe "edit" do
+		let(:user) { FactoryGirl.create(:user) }
+
+		before do
+			sign_in user
+			visit edit_user_path(user)
+		end
+
+		describe "page" do
+			it { should have_selector('h1', text: 'Update your profile') }
+
+			it { should have_selector('title', text: 'Edit profile') }
+
+			it { should have_link('change', href: 'http://gravatar.com/emails') }
+		end
+
+		describe "with invalid information" do
+			before { click_on 'Save changes' }
+
+			it { should have_content('error') }
+		end
+
+		describe "with valid information" do
+			let(:new_name) { "New name" }
+			let(:new_email) { "new@nltechdev.com" }
+			before do
+				fill_in "Name", with: new_name
+				fill_in "Email", with: new_email
+				fill_in "Password", with: user.password
+				fill_in "Confirm Password", with: user.password
+				click_on "Save changes"
+			end
+
+			it { should have_selector('title', text: new_name) }
+
+			it { should have_selector('div.alert.alert-success') }
+
+			it { should have_link('Sign Out', href: signout_path) }
+
+			specify { user.reload.name.should == new_name }
+
+			specify { user.reload.email.should == new_email }
+		end
+	end
 end
