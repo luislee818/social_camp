@@ -1,0 +1,11 @@
+<% if @save_success %>
+	<% if @redirect_path %>
+		window.location.href = "<%= @redirect_path %>";
+	<% else %>
+		$("#comment_input").val('');
+		$("#comments").empty().append('<%= j render partial: @comments, spacer_template: "comments/comment_ruler" %>');
+		$("#comments .comment-container").last().effect('highlight', {}, 2000);
+	<% end %>
+<% end %>
+
+$("#flash_container").empty().append('<%= j render partial: "layouts/flash", locals: { flash: flash } %>');

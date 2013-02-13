@@ -9,11 +9,24 @@ class CommentsController < ApplicationController
   	if comment.save
       log_add comment
       discussion.touch
+      @comments = discussion.comments
+      can_fit_in_one_page = @comments.length <= PER_PAGE
 
-  		redirect_to discussion, flash: { success: "Comment had been created." }
+      if can_fit_in_one_page
+        flash.now[:success] = "Comment had been created."
+      else
+        flash[:success] = "Comment had been created."
+        @redirect_path = discussion_path(discussion)
+      end
+
+      @save_success = true
   	else
-  		redirect_to discussion, flash: { error: "Comment was not created, please try again."}
+      flash.now[:error] = "Comment was not created, please try again."
   	end
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   def show

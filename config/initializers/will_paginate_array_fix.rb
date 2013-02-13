@@ -1,3 +1,5 @@
 require 'will_paginate/array'
 
-WillPaginate.per_page = 10
+PER_PAGE = 10
+
+WillPaginate.per_page = PER_PAGE

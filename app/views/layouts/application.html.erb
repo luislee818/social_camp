@@ -13,9 +13,9 @@
 <body class="<%= controller.controller_name %>">
 	<%= render 'layouts/header' %>
 	<div class="container">
-		<% flash.each do |key, value| %>
-	        <div class="alert alert-<%= key %>"><%= value %></div>
-		<% end %>
+    <div id="flash_container">
+      <%= render partial: "layouts/flash", locals: { flash: flash } %>
+    </div>
 		<%= yield %>
 		<%= render 'layouts/footer' %>
 		<%= debug(params) if Rails.env.development? %>
