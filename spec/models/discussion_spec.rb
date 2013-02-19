@@ -92,8 +92,9 @@ describe Discussion do
 		end
 
 		context "discussion with comments" do
-			it "should figure out the specs"
-
+			it "last_update_time should be the same as the last update time of comment" do
+				@discussion_without_comments.last_update_time.should >= @last_comment.updated_at
+			end
 		end
 	end
 
@@ -103,9 +104,11 @@ describe Discussion do
 			@discussion.save
 		end
 
-		xit "should change the updated_at attribute of discussion" do
-			# is there a good way to test timestampe change?
-			# expect { @discussion.touch }.to change { @discussion.updated_at }
+		it "should change the updated_at attribute of discussion" do
+			expect do
+				sleep 0.5
+				@discussion.touch
+			end.to change { @discussion.updated_at }
 		end
 	end
 

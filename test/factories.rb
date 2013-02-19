@@ -25,6 +25,14 @@ FactoryGirl.define do
     admin false
   end
 
+  factory :dapeng, class: :user do
+    name 'dapeng'
+    email 'dapeng@nltechdev.com'
+    password '1234Abcd'
+    password_confirmation '1234Abcd'
+    admin false
+  end
+
   factory :admin, class: :user do
     name 'amin'
     email 'admin@nltechdev.com'
