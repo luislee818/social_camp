@@ -8,17 +8,17 @@ namespace :db do
                  password_confirmation: "111111")
     admin.toggle!(:admin)
     admin.save
-                 
+
     User.create!(name: "John",
                  email: "john@nltechdev.com",
                  password: "1234Abcd",
                  password_confirmation: "1234Abcd")
-           
+
     User.create!(name: "Jane",
                  email: "jane@nltechdev.com",
                  password: "1234Abcd",
                  password_confirmation: "1234Abcd")
-                 
+
     (4..100).each do |n|
       name  = Faker::Name.name[0...20]
       email = "example-#{n+1}@nltechdev.com"
@@ -72,7 +72,7 @@ namespace :db do
       discussion_content = Faker::Lorem.paragraph(rand(4) + 1)
       discussion_user_id = rand(100) + 1 # random number from 1 to 100
 
-      discussion = Discussion.new(subject: discussion_subject, 
+      discussion = Discussion.new(subject: discussion_subject,
                              content: discussion_content)
       discussion.user_id = discussion_user_id
 
