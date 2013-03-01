@@ -4,6 +4,6 @@ One, it will be a free alternative to Basecamp, which I'm currently using with m
 
 Two, it will be a playground where I apply the technologies I've learned, Rails, Coffeescript, jQuery, to name a few.
 
-Maybe another purpose is to finally get myself on Github, and the open source world.
+Maybe another purpose is to finally get myself on GitHub, and the open source world.
 
 Let's keep learning, and bring more good stuff to this world.
